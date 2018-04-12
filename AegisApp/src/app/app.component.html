@@ -1,5 +1,5 @@
 <nav class="navbar fixed-top navbar-light justify-content-center">
-  <a class="navbar-brand" href="#">AEGIS</a>
+  <a class="navbar-brand" routerLink="" href="#">AEGIS</a>
   <ul class="nav">
     <li class="nav-item">
       <a class="nav-link active" href="#">Dialog Page</a>
@@ -14,11 +14,9 @@
 </nav>
 
 <div class="container-fluid">
-<router-outlet>
-<div class="row">
-  <div class="col-sm-4"><app-conversation></app-conversation></div>
-  <div class="col-sm"><app-dialog></app-dialog></div>
-</div></router-outlet>
+<router-outlet></router-outlet>
+
+
  </div>
 
 <footer class="footer centered">

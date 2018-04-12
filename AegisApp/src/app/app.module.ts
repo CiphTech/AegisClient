@@ -6,8 +6,10 @@ import { AppComponent } from './app.component';
 import { ConversationComponent } from './conversation/conversation.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { CheckInComponent } from './check-in/check-in.component';
+import { MainPageComponent } from './main-page/main-page.component';
 
 const appRoutes: Routes =[
+    { path: '', component: MainPageComponent},
     { path: 'checkin', component: CheckInComponent}
 ];
 
@@ -16,7 +18,8 @@ const appRoutes: Routes =[
     AppComponent,
     ConversationComponent,
     DialogComponent,
-    CheckInComponent
+    CheckInComponent,
+    MainPageComponent
   ],
   imports: [
     BrowserModule,

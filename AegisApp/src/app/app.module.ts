@@ -7,10 +7,12 @@ import { DialogComponent } from './dialog/dialog.component';
 import { CheckInComponent } from './check-in/check-in.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { AuthService } from './auth.service';
+import { KeyAccessComponent } from './key-access/key-access.component';
 
 const appRoutes: Routes =[
     { path: '', component: MainPageComponent},
-    { path: 'checkin', component: CheckInComponent}
+    { path: 'checkin', component: CheckInComponent},
+    { path: 'keyaccess', component: KeyAccessComponent}
 ];
 
 @NgModule({
@@ -18,7 +20,8 @@ const appRoutes: Routes =[
     AppComponent,
     DialogComponent,
     CheckInComponent,
-    MainPageComponent
+    MainPageComponent,
+    KeyAccessComponent
   ],
   imports: [
     BrowserModule,

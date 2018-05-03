@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Conversation, Message, Account} from '../model';
+import { AegisConversation, AegisMessage, AegisAccount} from '../model';
 import { AuthService } from '../auth.service';
 import { StringHelper } from '../utility';
 
@@ -11,10 +11,11 @@ import { StringHelper } from '../utility';
 export class DialogComponent implements OnInit {
 
 	textMessage:string;	
-  	convSvc: AuthService;
-	selectedConv:Conversation = new Conversation("default");
+  convSvc: AuthService;
+	selectedConv:AegisConversation = new AegisConversation("default");
 	selectTrue: boolean = false; // для выделения message при выборе
-	stringNull: boolean = false; // для отображения ошибки ввода
+  stringNull: boolean = false; // для отображения ошибки ввода
+  columnVisible: string = "c1";
 
   constructor(convSvc: AuthService) {
     this.convSvc = convSvc;
@@ -23,7 +24,7 @@ export class DialogComponent implements OnInit {
   ngOnInit() {
   }
 
-  selectConv(conv: Conversation){
+  selectConv(conv: AegisConversation){
   	this.selectedConv = conv;
   	this.selectTrue = true;
   }
@@ -34,14 +35,15 @@ export class DialogComponent implements OnInit {
   		return;
   	}
 
-  	let msg = new Message(this.selectedConv.nameConv,this.textMessage,"from");
+  	let msg = new AegisMessage(this.selectedConv.nameConv,this.textMessage,"from");
   	this.selectedConv.addMessage(msg);
   	this.textMessage="";
   	this.stringNull = false;
   }
 
-  addConv (acc: Account, nameConv:string){
-  	let conv = new Conversation(nameConv);
+  addConv (acc: AegisAccount, nameConv:string){
+  	let conv = new AegisConversation(nameConv);
   	acc.addConv(conv);
   }
+
 }

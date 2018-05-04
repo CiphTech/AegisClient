@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AegisConversation, AegisMessage, AegisAccount} from '../model';
+import { AegisConversation, AegisMessage, AegisAccount} from '../model/domain';
 import { AuthService } from '../auth.service';
 import { StringHelper } from '../utility';
 

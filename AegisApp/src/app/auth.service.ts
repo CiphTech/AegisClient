@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AegisConversation, AegisMessage, AegisAccount } from './model';
+import { AegisConversation, AegisMessage, AegisAccount } from './model/domain';
 
 @Injectable()
 export class AuthService {

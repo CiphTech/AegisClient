@@ -5,8 +5,10 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-sm" *ngIf="convSvc.accounts.length == 0"><button class="btn btn-primary btn-lg btn-block" routerLink="/checkin" type="button">New Account <i class="fas fa-user"></i></button></div>
-	<div class="col-sm-3" *ngIf="columnVisible=='c1'">
+	<div class="col-sm centered leftButton" *ngIf="convSvc.accounts.length == 0">
+		<button class="btn btn-primary btn-lg btn-block" routerLink="/checkin" type="button">New Account <i class="fas fa-user"></i></button>
+	</div>
+	<div class="col-sm-3" *ngIf="columnVisible=='c1' && convSvc.accounts.length> 0">
 		<div class="conversation">
 			<div class="convStat">
 				<div class="list-group" *ngFor="let i_acc of convSvc.accounts">

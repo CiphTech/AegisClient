@@ -15,7 +15,7 @@ a:hover {
 .centered {
 	text-align: center;
 }
-.convAdd {
+.convAdd, .leftButton {
 	margin-top: 10px;
 }
 .inner_button {

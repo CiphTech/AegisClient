@@ -6,8 +6,8 @@ import { AppComponent } from './app.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { CheckInComponent } from './check-in/check-in.component';
 import { MainPageComponent } from './main-page/main-page.component';
-import { AuthService } from './auth.service';
-import { DialogService } from './dialog.service';
+import { AuthService } from './services/auth.service';
+import { DialogService } from './services/dialog.service';
 import { KeyAccessComponent } from './key-access/key-access.component';
 
 const appRoutes: Routes =[

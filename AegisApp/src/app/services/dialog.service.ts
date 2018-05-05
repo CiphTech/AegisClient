@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AegisConversation, AegisAccount, AegisMessage, AegisResult } from './model/domain';
-import { IAegisChannel, AegisChannelFactory } from './model/channels';
+import { AegisConversation, AegisAccount, AegisMessage, AegisResult } from '../model/domain';
+import { IAegisChannel, AegisChannelFactory } from '../model/channels';
 
 @Injectable()
 export class DialogService {

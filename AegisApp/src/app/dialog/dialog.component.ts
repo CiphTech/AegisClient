@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AegisConversation, AegisMessage, AegisAccount} from '../model/domain';
-import { AuthService } from '../auth.service';
-import {DialogService} from '../dialog.service';
+import { AuthService } from '../services/auth.service';
+import {DialogService} from '../services/dialog.service';
 import {IAegisChannel} from '../model/channels';
 import { StringHelper } from '../utility';
 

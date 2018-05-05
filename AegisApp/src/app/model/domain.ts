@@ -93,4 +93,15 @@ export class AegisResult {
 	public get isSucceed() : boolean {
 		return this._code === 0;
 	}
+
+	constructor(code: number, message?: string) {
+		this._code = code;
+
+		if (!StringHelper.isNullOrEmpty(message))
+			this._message = message;
+	}
+
+	public static Ok(): AegisResult{
+		return new AegisResult(0);
+	}
 }

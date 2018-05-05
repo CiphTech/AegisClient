@@ -1,22 +1,24 @@
-<div class="interface_buttons centered">
+<div class="interface_buttons centered" *ngIf="convSvc.accounts.length> 0">
 	<div class="btn-group" role="group">
 		<button type="button" class="btn btn-secondary" (click)="columnVisible='c2'">1 column</button>
 		<button type="button" class="btn btn-secondary" (click)="columnVisible='c1'">2 column</button>
 	</div>
 </div>
-<div class="row">
-	<div class="col-sm centered leftButton" *ngIf="convSvc.accounts.length == 0">
-		<button class="btn btn-primary btn-lg btn-block" routerLink="/checkin" type="button">New Account <i class="fas fa-user"></i></button>
+<div class="firstWindow row justify-content-center" *ngIf="convSvc.accounts.length == 0">
+	<div class="col-sm-6">
+		<button class="btn btn-primary btn-lg btn-block btnFirstWindow" routerLink="/checkin" type="button">New Account <i class="fas fa-user"></i></button>
 	</div>
-	<div class="col-sm-3" *ngIf="columnVisible=='c1' && convSvc.accounts.length> 0">
+</div>
+<div class="row">
+	<div class="col-sm-4" *ngIf="columnVisible=='c1' && convSvc.accounts.length> 0">
 		<div class="conversation">
 			<div class="convStat">
 				<div class="list-group" *ngFor="let i_acc of convSvc.accounts">
-				  <li href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center active" >{{i_acc.accName}} (Name Account)<button type="button" class="btn btn-outline-dark" (click)="addConv(i_acc,'123123')"><i class="fas fa-plus-square"></i></button>
-				  </li>
-				  <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" *ngFor="let i_conv of i_acc.convAcc" (click)="selectConv(i_conv, i_acc)">{{i_conv.nameConv}}
-				  	<span class="badge badge-primary badge-pill">{{i_conv.messageCount}}</span>
-				  </a>
+					<li href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center active" >{{i_acc.accName}} (Name Account)<button type="button" class="btn btn-outline-dark" (click)="addConv(i_acc,'123123')"><i class="fas fa-plus-square"></i></button>
+					</li>
+					<a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" *ngFor="let i_conv of i_acc.convAcc" (click)="selectConv(i_conv, i_acc)">{{i_conv.nameConv}}
+					<span class="badge badge-primary badge-pill">{{i_conv.messageCount}}</span>
+					</a>
 		    	</div>
 				<div class="convAdd">
 					<button class="btn btn-primary btn-lg btn-block" routerLink="/checkin" type="button">New Account <i class="fas fa-user"></i></button>
@@ -24,12 +26,7 @@
 			</div>
 		</div>
 	</div>
-<!-- 	<div class="col-sm-1">
-		<div class="inner_button">
-			<img src="../assets/bg.png" (click)="columnVisible='c2'" alt="">
-		</div>
-	</div>
- -->	<div class="col-sm" >
+	<div class="col-sm" >
 		<div class="dialog"  *ngIf="convSvc.accounts.length > 0">
 			<div class="messages" *ngIf="selectedConv.messageCount > 0">
 				<div class="card" *ngFor="let i_msg of selectedConv.messages">

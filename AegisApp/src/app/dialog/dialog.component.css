@@ -15,10 +15,9 @@ a:hover {
 .centered {
 	text-align: center;
 }
-.convAdd, .leftButton {
+.convAdd, .firstWindow {
 	margin-top: 10px;
 }
-.inner_button {
-	min-height: 100%;
-	background: rgb(0,0,0);
+.btnFirstWindow {
+	height: 100px;
 }

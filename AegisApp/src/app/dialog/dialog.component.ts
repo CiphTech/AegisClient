@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AegisConversation, AegisMessage, AegisAccount} from '../model/domain';
+import { AegisConversation, AegisMessage, AegisAccount } from '../model/domain';
 import { AuthService } from '../services/auth.service';
-import {DialogService} from '../services/dialog.service';
-import {IAegisChannel} from '../model/channels';
+import { DialogService } from '../services/dialog.service';
+import { IAegisChannel } from '../model/channels';
 import { StringHelper } from '../utility';
 
 @Component({
@@ -12,14 +12,14 @@ import { StringHelper } from '../utility';
 })
 export class DialogComponent implements OnInit {
 
-	textMessage:string;	
-  convSvc: AuthService;
-  dialogSvc: DialogService;
-	selectedConv:AegisConversation = new AegisConversation("default");
-  selectedAcc: AegisAccount;
-	selectTrue: boolean = false; // для выделения message при выборе
-  stringNull: boolean = false; // для отображения ошибки ввода
-  columnVisible: string = "c1";
+	public textMessage: string;	
+  public convSvc: AuthService;
+  public dialogSvc: DialogService;
+	public selectedConv: AegisConversation = new AegisConversation("default");
+  public selectedAcc: AegisAccount;
+	public selectTrue: boolean = false; // для выделения message при выборе
+  public stringNull: boolean = false; // для отображения ошибки ввода
+  public columnVisible: string = "c1"; 
 
   constructor(convSvc: AuthService, dialogSvc: DialogService) {
     this.convSvc = convSvc;
@@ -35,13 +35,13 @@ export class DialogComponent implements OnInit {
   	this.selectTrue = true;
   }
 
-  sendMessage (){
+  sendMessage() {
   	if (StringHelper.isNullOrEmpty(this.textMessage)) {
   		this.stringNull = true;
   		return;
   	}
 
-  	let msg = new AegisMessage(this.selectedConv.nameConv,this.textMessage,"from");
+    let msg = new AegisMessage(this.selectedConv.nameConv, this.textMessage, "from");
 
     let channel = this.dialogSvc.getChannel(this.selectedAcc);
 
@@ -53,13 +53,13 @@ export class DialogComponent implements OnInit {
       return;
     }
 
-  	this.selectedConv.addMessage(msg);
-  	this.textMessage="";
+    this.selectedConv.addMessage(msg);
+    this.textMessage = "";
   	this.stringNull = false;
   }
 
-  addConv (acc: AegisAccount, nameConv:string){
-  	let conv = new AegisConversation(nameConv);
+  addConv(acc: AegisAccount, nameConv: string) {
+    let conv = new AegisConversation(nameConv);
   	acc.addConv(conv);
   }
 

@@ -14,7 +14,7 @@ export class AegisStubChannel implements IAegisChannel {
 
 	public sendMessage(conversation: AegisConversation, message: AegisMessage): AegisResult {
 		console.log('[AegisStubChannel] Conversation \'' + conversation.nameConv + '\' Message \'' + message.textMessage + '\'');
-		return AegisResult.Ok();
+		return AegisResult.ok();
 	}
 }
 

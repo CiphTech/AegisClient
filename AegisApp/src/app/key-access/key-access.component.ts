@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 @Component({
   selector: 'app-key-access',
   templateUrl: './key-access.component.html',
@@ -11,6 +10,5 @@ export class KeyAccessComponent implements OnInit {
 
   ngOnInit() {
   }
-
 
 }

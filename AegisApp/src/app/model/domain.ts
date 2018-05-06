@@ -101,7 +101,11 @@ export class AegisResult {
 			this._message = message;
 	}
 
-	public static Ok(): AegisResult{
+	public static ok(): AegisResult{
 		return new AegisResult(0);
+	}
+
+	public static fail(code: number, message?: string): AegisResult {
+		return new AegisResult(code, message);
 	}
 }

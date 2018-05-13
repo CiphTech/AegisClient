@@ -1,4 +1,5 @@
 import {StringHelper} from '../utility';
+import {IAegisToken} from './tokens';
 
 export class AegisMessage {
 
@@ -58,10 +59,12 @@ export class AegisConversation {
 export class AegisAccount {
 
 	private _account:string;
+	private _token: IAegisToken;
 	private _conv:AegisConversation[];
 
-	constructor(account:string){
-		this._account = account;
+	constructor(accountName: string, accountToken: IAegisToken){
+		this._account = accountName;
+		this._token = accountToken;
 		this._conv = new Array();
 	}
 

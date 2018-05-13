@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AegisConversation, AegisMessage, AegisAccount } from '../model/domain';
+import {IAegisToken, SimpleTextToken} from '../model/tokens';
 
 @Injectable()
 export class AuthService {
@@ -10,7 +11,9 @@ export class AuthService {
 
   	createAccount(accName:string) {
 
-		let acc = new AegisAccount(accName);
+  		let token = new SimpleTextToken('testToken');
+
+		let acc = new AegisAccount(accName, token);
 
 		this.accounts.push(acc);
 

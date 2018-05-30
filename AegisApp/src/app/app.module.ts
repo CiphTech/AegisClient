@@ -9,6 +9,7 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { AuthService } from './services/auth.service';
 import { DialogService } from './services/dialog.service';
 import { KeyAccessComponent } from './key-access/key-access.component';
+import { DragAndDropDirective } from './directives/drag-and-drop.directive';
 
 const appRoutes: Routes =[
     { path: '', component: MainPageComponent},
@@ -22,12 +23,16 @@ const appRoutes: Routes =[
     DialogComponent,
     CheckInComponent,
     MainPageComponent,
-    KeyAccessComponent
+    KeyAccessComponent,
+    DragAndDropDirective
   ],
   imports: [
     BrowserModule,
     FormsModule,
     RouterModule.forRoot(appRoutes)
+  ],
+  exports: [
+      DragAndDropDirective
   ],
   providers: [AuthService, DialogService],
   bootstrap: [AppComponent]

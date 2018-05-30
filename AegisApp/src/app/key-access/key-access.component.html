@@ -1,4 +1,27 @@
-<div id="drop-area">
-  <form class="my-form">
-  </form>
+<div class="dropzone" 
+	appDragAndDrop 
+	(droppedFile)="onDropFiles($event)" 
+	(draggingOver)="onDragOver($event)" 
+	[ngClass]="{'disabled': disabled, 'is-dragged-over': isDraggedOver}">
+
+
+	<p><a (click)="openFileDialog()">Choose a file</a> or drag it here</p>
+
+	<input type="file" 
+		id="file-input" 
+		#fileInput 
+		(change)="onBrowseFiles($event)" 
+		[multiple]="multiple" 
+		[disabled]="disabled">
+
+	<p class="file-name">
+		<ng-container *ngIf="files === undefined || files.length === 0">
+			No files selected
+		</ng-container>
+		<ng-container *ngIf="files !== undefined && files.length > 0">
+			<ng-container *ngIf="files.length === 1">{{ files[0].name }}</ng-container>
+			<ng-container *ngIf="files.length > 1">Multiple files selected</ng-container>
+		</ng-container>
+	</p>
+
 </div>

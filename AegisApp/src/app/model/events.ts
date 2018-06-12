@@ -1,4 +1,4 @@
-class AegisEvent<T> {
+export class AegisEvent<T> {
 
 	private _callbacks: IEventHandlerDesc<T>[] = [];
 
@@ -38,16 +38,16 @@ class AegisEvent<T> {
 	}
 }
 
-interface ISubscription {
+export interface ISubscription {
 	unsubscribe(): void;
 }
 
-interface ITypedSubscription<T> extends ISubscription {
+export interface ITypedSubscription<T> extends ISubscription {
 	handler: IEventHandler<T>;
 	evt: AegisEvent<T>;
 }
 
-interface IEventHandler<T> {
+export interface IEventHandler<T> {
 	(arg: T, context?: any);
 }
 

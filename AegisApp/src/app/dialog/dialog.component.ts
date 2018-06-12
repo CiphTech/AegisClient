@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AegisConversation, AegisMessage, AegisAccount } from '../model/domain';
 import { AuthService } from '../services/auth.service';
 import { DialogService } from '../services/dialog.service';
-import { IAegisChannel } from '../model/channels';
+import { IAegisChannel, AegisReceived } from '../model/channels';
 import { StringHelper } from '../utility';
+import { AegisEvent, IEventHandler, ITypedSubscription } from '../model/events';
 
 @Component({
   selector: 'app-dialog',
@@ -43,9 +44,17 @@ export class DialogComponent implements OnInit {
 
     let msg = new AegisMessage(this.selectedConv.nameConv, this.textMessage, "from");
 
-    let channel = this.dialogSvc.getChannel(this.selectedAcc);
+    let channel: IAegisChannel = this.dialogSvc.getChannel(this.selectedAcc);
+
+    let handler = function(arg: AegisReceived, context?: any) {
+      console.log('New message has been received. Conv: ' + arg.conversation.nameConv + 'Msg: ' + arg.messages[0].textMessage);
+    }
+
+    let subscription = channel.onNewMessage.subscribe(handler, this);
 
     let result = channel.sendMessage(this.selectedConv, msg);
+
+    subscription.unsubscribe();
 
     if (!result.isSucceed)
     {

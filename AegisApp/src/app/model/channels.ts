@@ -27,10 +27,12 @@ export class AegisStubChannel implements IAegisChannel {
 
 		let received = new AegisReceived(conversation, msgArr);
 
+		this.onNewMessage.raise(received);
+
 		return AegisResult.ok();
 	}
 
-	public onNewMessage: AegisEvent<AegisReceived>;
+	public onNewMessage: AegisEvent<AegisReceived> = new AegisEvent<AegisReceived>();
 }
 
 export class AegisChannelFactory {

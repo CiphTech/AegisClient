@@ -36,6 +36,9 @@ export class AegisEvent<T> {
 			callbacks[i].handler.apply(callbacks[i].subscriber, [arg, context]);
 		}
 	}
+
+	constructor() {
+	}
 }
 
 export interface ISubscription {

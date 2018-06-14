@@ -1,6 +1,8 @@
 import { AegisConversation, AegisAccount, AegisMessage, AegisResult } from './domain';
 import { IAegisToken } from './tokens';
 import { AegisEvent } from './events';
+import {HttpClient } from '@angular/common/http';
+import {AegisVkChannel} from './channels.vk';
 
 export interface IAegisChannel {
 	setCreds(token: IAegisToken): void;
@@ -11,8 +13,6 @@ export interface IAegisChannel {
 }
 
 export class AegisStubChannel implements IAegisChannel {
-
-	private _conversations: AegisConversation[] = [];
 
 	public setCreds(token: IAegisToken): void {
 		console.log('Token was set: ' + token.getString());
@@ -40,6 +40,14 @@ export class AegisChannelFactory {
 	public static createChannel(account: AegisAccount): IAegisChannel{
 		console.log('Creating new channel for account ' + account.accName);
 		return new AegisStubChannel();
+	}
+
+	public static createVkChannel(account: AegisAccount, http: HttpClient): IAegisChannel{
+		let channel = new AegisVkChannel(http);
+
+		channel.setCreds(account.token);
+
+		return channel;
 	}
 }
 

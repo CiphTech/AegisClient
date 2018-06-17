@@ -29,11 +29,26 @@
 	<div class="col-sm" >
 		<div class="dialog"  *ngIf="convSvc.accounts.length > 0">
 			<div class="messages" *ngIf="selectedConv.messageCount > 0">
-				<div class="card" *ngFor="let i_msg of selectedConv.messages">
-					<div class="card-body">
-						<h5 class="card-title">Name of interlocutor</h5>
-						<h6 class="card-subtitle mb-2 text-muted">{{selectedConv.nameConv}}</h6>
-						<p class="card-text">{{i_msg.textMessage}}</p>
+				<div class="row">
+				  <div class="col-md-11 offset-md-1">
+					<div class="card text-white bg-secondary" *ngFor="let i_msg of selectedConv.messages">
+						<div class="card-body text-right">
+							<h5 class="card-title">My Name</h5>
+							<h6 class="card-subtitle mb-2">{{selectedConv.nameConv}}</h6>
+							<p class="card-text">{{i_msg.textMessage}}</p>
+						</div>
+					</div>
+				  </div>
+				</div>
+				<div class="row">
+					<div class="col-md-11">
+						<div class="card" *ngIf="titleInterlocutor > 0">
+							<div class="card-body">
+								<h5 class="card-title">Name of interlocutor</h5>
+								<h6 class="card-subtitle mb-2 text-muted">{{titleInterlocutor}}</h6>
+								<p class="card-text">{{msgInterlocutor}}</p>
+						</div>
+					</div>
 					</div>
 				</div>
 			</div>

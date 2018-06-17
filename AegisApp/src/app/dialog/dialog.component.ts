@@ -21,6 +21,8 @@ export class DialogComponent implements OnInit {
 	public selectTrue: boolean = false; // для выделения message при выборе
   public stringNull: boolean = false; // для отображения ошибки ввода
   public columnVisible: string = "c1"; 
+  public titleInterlocutor: string;
+  public msgInterlocutor: string;
 
   constructor(convSvc: AuthService, dialogSvc: DialogService) {
     this.convSvc = convSvc;
@@ -47,7 +49,9 @@ export class DialogComponent implements OnInit {
     let channel: IAegisChannel = this.dialogSvc.getChannel(this.selectedAcc);
 
     let handler = function(arg: AegisReceived, context?: any) {
-      console.log('New message has been received. Conv: ' + arg.conversation.nameConv + 'Msg: ' + arg.messages[0].textMessage);
+      //console.log('New message has been received. Conv: ' + arg.conversation.nameConv + 'Msg: ' + arg.messages[0].textMessage);
+      this.titleInterlocutor = arg.conversation.nameConv;
+      this.msgInterlocutor = arg.messages[0].textMessage;
     }
 
     let subscription = channel.onNewMessage.subscribe(handler, this);

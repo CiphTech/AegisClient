@@ -56,13 +56,22 @@ export class AegisConversation {
 	}
 }
 
+export enum AccountType {
+	Vk = 0,
+	Facebook = 1
+}
+
 export class AegisAccount {
 
-	private _account:string;
-	private _token: IAegisToken;
-	private _conv:AegisConversation[];
+	private readonly _id: number;
+	private readonly _type: AccountType;
+	private readonly _account:string;
+	private readonly _token: IAegisToken;
+	private readonly _conv:AegisConversation[];
 
-	constructor(accountName: string, accountToken: IAegisToken){
+	constructor(id: number, type: AccountType, accountName: string, accountToken: IAegisToken){
+		this._id = id;
+		this._type = type;
 		this._account = accountName;
 		this._token = accountToken;
 		this._conv = new Array();
@@ -70,6 +79,14 @@ export class AegisAccount {
 
 	public addConv(conv:AegisConversation) {
 		this._conv.push(conv);
+	}
+
+	public get id(): number{
+		return this._id;
+	}
+
+	public get token(): IAegisToken{
+		return this._token;
 	}
 
 	public get convAcc() : AegisConversation[] {

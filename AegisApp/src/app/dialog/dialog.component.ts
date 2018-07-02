@@ -22,7 +22,6 @@ export class DialogComponent implements OnInit {
   public stringNull: boolean = false; // для отображения ошибки ввода
   public columnVisible: string = "c1"; 
   public titleInterlocutor: string;
-  public msgInterlocutor: string;
 
   constructor(convSvc: AuthService, dialogSvc: DialogService) {
     this.convSvc = convSvc;
@@ -44,14 +43,17 @@ export class DialogComponent implements OnInit {
   		return;
   	}
 
-    let msg = new AegisMessage(this.selectedConv.nameConv, this.textMessage, "from");
+    let msg = new AegisMessage(this.selectedConv.nameConv, this.textMessage);
 
     let channel: IAegisChannel = this.dialogSvc.getChannel(this.selectedAcc);
 
     let handler = function(arg: AegisReceived, context?: any) {
       //console.log('New message has been received. Conv: ' + arg.conversation.nameConv + 'Msg: ' + arg.messages[0].textMessage);
       this.titleInterlocutor = arg.conversation.nameConv;
-      this.msgInterlocutor = arg.messages[0].textMessage;
+      
+      for (var i = 0; i < arg.messages.length; i++) {
+          this.selectedConv.addMessage(arg.messages[i]);
+        }
     }
 
     let subscription = channel.onNewMessage.subscribe(handler, this);

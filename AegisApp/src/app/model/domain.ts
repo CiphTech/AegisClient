@@ -7,11 +7,16 @@ export class AegisMessage {
 	private _text:string;
 	private _from:string;
 
-	constructor(title:string, text:string, from:string){
+	constructor(title:string, text:string, from?:string){
 		this._title = title;
 		this._text = text;
 		this._from = from;
 	}
+
+	public get isIncomming() : boolean {
+		return this._from !== undefined;
+	}
+	
 	public get textMessage() : string {
 		return this._text;
 	}

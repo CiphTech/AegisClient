@@ -30,7 +30,7 @@
 		<div class="dialog"  *ngIf="convSvc.accounts.length > 0">
 			<div class="messages" *ngIf="selectedConv.messageCount > 0">
 				<div class="card" *ngFor="let i_msg of selectedConv.messages">
-					<div class="card-body"> <!--сюда incoming ngClass-->
+					<div [ngClass]="getClassIncoming(i_msg)" class="card-body"> <!--сюда incoming ngClass-->
 						<h5 class="card-title">My Name</h5>
 						<h6 class="card-subtitle mb-2">{{selectedConv.nameConv}}</h6>
 						<p class="card-text">{{i_msg.textMessage}}</p>

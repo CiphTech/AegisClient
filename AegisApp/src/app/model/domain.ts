@@ -13,7 +13,7 @@ export class AegisMessage {
 		this._from = from;
 	}
 
-	public get isIncomming() : boolean {
+	public get isIncoming() : boolean {
 		return this._from !== undefined;
 	}
 	

@@ -20,7 +20,7 @@ export class DialogComponent implements OnInit {
   public selectedAcc: AegisAccount;
 	public selectTrue: boolean = false; // для выделения message при выборе
   public stringNull: boolean = false; // для отображения ошибки ввода
-  public columnVisible: string = "c1"; 
+  public columnVisible: string = "c1"; //времяночка
   public titleInterlocutor: string;
 
   constructor(convSvc: AuthService, dialogSvc: DialogService) {
@@ -71,7 +71,14 @@ export class DialogComponent implements OnInit {
     this.selectedConv.addMessage(msg);
     this.textMessage = "";
   	this.stringNull = false;
+
   }
+
+    getClassIncoming(msg:AegisMessage) {
+
+      return {"bg-danger" : msg.isIncoming};
+      
+    }
 
   addConv(acc: AegisAccount, nameConv: string) {
     let conv = new AegisConversation(nameConv);

@@ -48,7 +48,7 @@ export class DialogComponent implements OnInit {
     let channel: IAegisChannel = this.dialogSvc.getChannel(this.selectedAcc);
 
     let handler = function(arg: AegisReceived, context?: any) {
-      //console.log('New message has been received. Conv: ' + arg.conversation.nameConv + 'Msg: ' + arg.messages[0].textMessage);
+
       this.titleInterlocutor = arg.conversation.nameConv;
       
       for (var i = 0; i < arg.messages.length; i++) {
@@ -71,14 +71,13 @@ export class DialogComponent implements OnInit {
     this.selectedConv.addMessage(msg);
     this.textMessage = "";
   	this.stringNull = false;
+  }
+   /*CSS-Класс по входящим сообщениям*/
+  getClassIncoming(msg:AegisMessage) {
+
+    return {"bg-danger" : msg.isIncoming};
 
   }
-
-    getClassIncoming(msg:AegisMessage) {
-
-      return {"bg-danger" : msg.isIncoming};
-      
-    }
 
   addConv(acc: AegisAccount, nameConv: string) {
     let conv = new AegisConversation(nameConv);

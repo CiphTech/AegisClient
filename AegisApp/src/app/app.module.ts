@@ -11,11 +11,13 @@ import { AuthService } from './services/auth.service';
 import { DialogService } from './services/dialog.service';
 import { KeyAccessComponent } from './key-access/key-access.component';
 import { DragAndDropDirective } from './directives/drag-and-drop.directive';
+import { ConvAccessComponent } from './conv-access/conv-access.component';
 
 const appRoutes: Routes =[
     { path: '', component: MainPageComponent},
     { path: 'checkin', component: CheckInComponent},
-    { path: 'keyaccess', component: KeyAccessComponent}
+    { path: 'keyaccess', component: KeyAccessComponent},
+    { path: 'convaccess', component: ConvAccessComponent}
 ];
 
 @NgModule({
@@ -25,7 +27,8 @@ const appRoutes: Routes =[
     CheckInComponent,
     MainPageComponent,
     KeyAccessComponent,
-    DragAndDropDirective
+    DragAndDropDirective,
+    ConvAccessComponent
   ],
   imports: [
     BrowserModule,

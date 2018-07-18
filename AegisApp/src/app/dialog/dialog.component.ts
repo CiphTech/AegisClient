@@ -4,6 +4,7 @@ import { AuthService } from '../services/auth.service';
 import { DialogService } from '../services/dialog.service';
 import { IAegisChannel, AegisReceived } from '../model/channels';
 import { StringHelper } from '../utility';
+import { ConvAccessComponent } from '../conv-access/conv-access.component';
 import { AegisEvent, IEventHandler, ITypedSubscription } from '../model/events';
 
 @Component({

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AegisConversation, AegisAccount, AegisMessage, AegisResult } from '../model/domain';
+import * as Model from '../model/domain';
 import { IAegisChannel, AegisChannelFactory } from '../model/channels';
 
 @Injectable()
@@ -13,17 +13,15 @@ export class DialogService {
   		this._http = http;
    }
 
-  public getChannel(account: AegisAccount): IAegisChannel{
+  public getChannel(account: Model.AegisAccount): IAegisChannel{
+
+    if (account.accType === Model.AccountType.Vk)
+      return AegisChannelFactory.createVkChannel(account, this._http);
 
   	if (this._stubChannel == null)
   		this._stubChannel = AegisChannelFactory.createChannel(account);
 
   	return this._stubChannel;
-  }
-
-  public getVkChannel(account: AegisAccount): IAegisChannel{
-  	let channel = AegisChannelFactory.createVkChannel(account, this._http);
-  	return channel;
   }
 
 }

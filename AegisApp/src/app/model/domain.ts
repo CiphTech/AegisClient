@@ -28,7 +28,6 @@ export class AegisConversation {
 	private _messages: AegisMessage[];
 	private _chatId: string;
 
-	constructor(name: string)
 	constructor(name: string, id?: string) {
 
 		if (StringHelper.isNullOrEmpty(id))
@@ -100,6 +99,10 @@ export class AegisAccount {
 
 	public get accName() : string {
 		return this._account;
+	}
+
+	public get accType() : AccountType {
+		return this._type;
 	}
 } 
 

@@ -10,6 +10,7 @@ export class AegisVkChannel implements IAegisChannel {
 
 	private _token: IAegisToken;
 	private readonly _http: HttpClient;
+	private _result: AegisResult;
 
 	public setCreds(token: IAegisToken): void {
 
@@ -28,24 +29,33 @@ export class AegisVkChannel implements IAegisChannel {
 
 		let url = 'https://api.vk.com/method/messages.send?chat_id=' + conversation.id + '&message=' + message.textMessage + '&v=5.69&access_token=' + this._token.getString();
 
-		console.log(url);
+		this.internalSend(url);
 
-		let result: AegisResult;
-
-		let prom = this._http.jsonp(url, 'callback').toPromise().catch((err) => {
-			console.log('[VK] ERROR: ' + err);
-			result = AegisResult.fail(1, err);
-		}).then((response) => {
-			console.log('[VK] SUCCESS: ' + response);
-			result = AegisResult.ok();
-		});
-
-		return result;
+		return this._result;
 	}
 
 	public onNewMessage: AegisEvent<AegisReceived> = new AegisEvent<AegisReceived>();
 
 	constructor(http: HttpClient) {
 		this._http = http;
+	}
+
+	private async internalSend(url: string) {
+		console.log(url);
+
+		let prom = new Promise((res, rej) => {
+					this._http.jsonp(url, 'callback').toPromise()
+						.catch((err) => {
+							console.log('[VK] ERROR: ' + err);
+							this._result = AegisResult.fail(1, err);
+							rej(err);
+						}).then((response) => {
+							console.log('[VK] SUCCESS: ' + response);
+							this._result = AegisResult.ok();
+							res();
+						});
+			});
+
+		await prom;
 	}
 }

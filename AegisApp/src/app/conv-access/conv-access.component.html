@@ -1,0 +1,58 @@
+<div class="row justify-content-md-center">
+	<div class="col col-md-2"></div>
+	<div class="col-md-8">
+		<div class="card text-center">
+			<div class="card-header">
+			Use the New Key
+			</div>
+			<div class="card-body">
+				<h5 class="card-title">Create a new key for your dialogue</h5>
+					<p class="card-text">This key will be kept only by you, with its help you will be able to ensure the confidentiality of your correspondence</p>
+
+	<!--Это текстовое поле для название диалога потом перенос на нужный компонент-->
+				<input type="text" placeholder="Name of the dialog" class="form-control" [(ngModel)]="ConvName">
+				<p> </p>
+
+				<button class="btn btn-primary"  routerLink="" >Create a new Key</button>
+			</div>
+		</div>
+	</div>
+	<div class="col col-md-2"></div>
+</div>
+
+<div class="row justify-content-md-center">
+	<div class="col col-md-2"></div>
+	<div class="col-md-8">
+		<div class="card text-center">
+			<div class="card-header">
+			Use an existing key
+			</div>
+			<div class="dropzone" 
+				appDragAndDrop 
+				(droppedFile)="onDropFiles($event)" 
+				(draggingOver)="onDragOver($event)" 
+				[ngClass]="{'disabled': disabled, 'is-dragged-over': isDraggedOver}">
+
+				<p><a (click)="openFileDialog()">Choose a file</a> or drag it here</p>
+
+				<input type="file" 
+					id="file-input" 
+					#fileInput 
+					(change)="onBrowseFiles($event)" 
+					[multiple]="multiple" 
+					[disabled]="disabled">
+
+				<p class="file-name">
+					<ng-container *ngIf="files === undefined || files.length === 0">
+						No files selected
+					</ng-container>
+					<ng-container *ngIf="files !== undefined && files.length > 0">
+						<ng-container *ngIf="files.length === 1">{{ files[0].name }}</ng-container>
+						<ng-container *ngIf="files.length > 1">Multiple files selected</ng-container>
+					</ng-container>
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class="col col-md-2"></div>
+</div>

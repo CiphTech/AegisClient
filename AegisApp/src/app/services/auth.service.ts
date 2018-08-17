@@ -23,7 +23,7 @@ export class AuthService {
 
   		let token = new SimpleTextToken('testToken');
 
-		let acc = new AegisAccount(this.getNewId(), AccountType.Vk, accName, token);
+		let acc = new AegisAccount(this.getNewId(), AccountType.Test, accName, token);
 
 		this.accounts.push(acc);
 

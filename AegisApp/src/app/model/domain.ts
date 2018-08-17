@@ -61,8 +61,9 @@ export class AegisConversation {
 }
 
 export enum AccountType {
-	Vk = 0,
-	Facebook = 1
+	Test = 0,
+	Vk = 1,
+	Facebook = 2
 }
 
 export class AegisAccount {

@@ -81,7 +81,7 @@ export class DialogComponent implements OnInit {
   }
 
   addConv(acc: AegisAccount, nameConv: string) {
-    let conv = new AegisConversation(nameConv);
+    let conv = new AegisConversation(nameConv, '108');
   	acc.addConv(conv);
   }
 

@@ -19,15 +19,20 @@ export class AuthService {
 
   	public createAccount(accName:string): void {
 
+  		console.log('New account ' + accName);
+
   		let token = new SimpleTextToken('testToken');
 
-		let acc = new AegisAccount(this.getNewId(), AccountType.Vk, accName, token);
+		let acc = new AegisAccount(this.getNewId(), AccountType.Test, accName, token);
 
 		this.accounts.push(acc);
 
 	}
 
 	public createVkAcc(accName: string, token: string): void {
+
+		console.log('New VK account ' + accName);
+		console.log('Token ' + token);
 
 		let tok = new SimpleTextToken(token);
 

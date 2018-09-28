@@ -46,7 +46,7 @@ export class DialogComponent implements OnInit {
 
     let msg = new AegisMessage(this.selectedConv.nameConv, this.textMessage);
 
-    let channel: IAegisChannel = this.dialogSvc.getChannel(this.selectedAcc);
+    let channel = this.dialogSvc.getChannel(this.selectedAcc);
 
     let handler = function(arg: AegisReceived, context?: any) {
 
@@ -87,8 +87,9 @@ export class DialogComponent implements OnInit {
   }
 
   addConv(acc: AegisAccount, nameConv: string) {
-    let conv = new AegisConversation(nameConv, '111');
-  	acc.addConv(conv);
+    this.convSvc.createVkConversation(acc, nameConv)
+      .then(conv => acc.addConv(conv))
+      .catch(err => console.log(err));
   }
 
 }

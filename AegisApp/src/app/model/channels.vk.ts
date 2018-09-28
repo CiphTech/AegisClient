@@ -40,31 +40,31 @@ export class AegisVkChannel implements IAegisChannel {
 	private internalSend(url: string) : Promise<AegisResult> {
 		console.log(url);
 
-		let prom = new Promise<AegisResult>((resolve, reject) => 
+		const prom = new Promise<AegisResult>((resolve, reject) => 
 		{
-			let observable = this._http.jsonp(url, 'callback');
+			const observable = this._http.jsonp(url, 'callback');
 
-			let onNext = response => {
+			const onNext = response => {
 				// console.log('[VK] NEXT'); 
 				// console.log(response); 
 				subscription.unsubscribe();
 				resolve(AegisVkChannel.parseResult(response));
 			}
 
-			let onError = response => {
+			const onError = response => {
 				// console.log('[VK] ERROR');
 				// console.log(response);
 				subscription.unsubscribe();
 				reject(response);
 			}
 
-			let onComplete = () => {
+			const onComplete = () => {
 				// console.log('[VK] COMPLETE');
 				subscription.unsubscribe();
 				reject('Completed');
 			}
 
-			let subscription = observable.subscribe(onNext, onError, onComplete);
+			const subscription = observable.subscribe(onNext, onError, onComplete);
 		});
 
 		return prom;

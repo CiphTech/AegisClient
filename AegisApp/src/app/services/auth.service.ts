@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AegisConversation, AegisMessage, AegisAccount, AccountType } from '../model/domain';
 import {IAegisToken, SimpleTextToken} from '../model/tokens';
+import {HttpClient} from "@angular/common/http";
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,7 @@ export class AuthService {
 		return current;
 	}
 
-	constructor() { }
+	constructor(private _http: HttpClient) { }
 
   	public createAccount(accName:string): void {
 
@@ -41,5 +42,49 @@ export class AuthService {
 		this.accounts.push(acc);
 	}
 
+	public createVkConversation(account: AegisAccount, title: string): Promise<AegisConversation> {
+		const url = 'https://api.vk.com/method/messages.createChat?title=' + title + '&v=5.69&access_token=' + account.token.getString();
+
+		console.log(url);
+
+		const prom = new Promise<AegisConversation>((resolve, reject) => {
+
+			const observable = this._http.jsonp(url, 'callback');
+
+			const onNext = response => {
+				subscription.unsubscribe();
+
+				const result = AuthService.internalParseVkConv(response, title);
+
+				if (result !== undefined)
+					resolve(result);
+				else
+					reject(response);
+			}
+
+			const onError = response => {
+				subscription.unsubscribe();
+
+				reject(response);
+			}
+
+			const onComplete = () => {
+				subscription.unsubscribe();
+
+				reject('Completed');
+			}
+
+			const subscription = observable.subscribe(onNext, onError, onComplete);
+		});
+
+		return prom;
+	}
+
+	private static internalParseVkConv(response: any, title: string): AegisConversation {
+		if (typeof response.response !== 'undefined')
+			return new AegisConversation(title, response.response);
+
+		return undefined;
+	}
 }
 

@@ -7,7 +7,7 @@ import {AegisVkChannel} from './channels.vk';
 export interface IAegisChannel {
 	setCreds(token: IAegisToken): void;
 
-	sendMessage(conversation: AegisConversation, message: AegisMessage): AegisResult;
+	sendMessage(conversation: AegisConversation, message: AegisMessage): Promise<AegisResult>;
 
 	onNewMessage: AegisEvent<AegisReceived>;
 }
@@ -18,7 +18,7 @@ export class AegisStubChannel implements IAegisChannel {
 		console.log('Token was set: ' + token.getString());
 	}
 
-	public sendMessage(conversation: AegisConversation, message: AegisMessage): AegisResult {
+	public sendMessage(conversation: AegisConversation, message: AegisMessage): Promise<AegisResult> {
 		console.log('[AegisStubChannel] Conversation \'' + conversation.nameConv + '\' Message \'' + message.textMessage + '\'');
 
 		let recMsg = new AegisMessage('Received message', 'Message at ' + new Date(), 'Channel');
@@ -29,7 +29,7 @@ export class AegisStubChannel implements IAegisChannel {
 
 		this.onNewMessage.raise(received);
 
-		return AegisResult.ok();
+		return new Promise<AegisResult>((resolve, reject) => resolve(AegisResult.ok()));
 	}
 
 	public onNewMessage: AegisEvent<AegisReceived> = new AegisEvent<AegisReceived>();

@@ -3,14 +3,13 @@ import { AegisConversation, AegisAccount, AegisMessage, AegisResult } from './do
 import { IAegisToken } from './tokens';
 import { AegisEvent } from './events';
 
-import { Observable } from "rxjs/Observable";
+import { Observable, Observer } from "rxjs/Rx";
 import {HttpClient} from "@angular/common/http";
 
 export class AegisVkChannel implements IAegisChannel {
 
 	private _token: IAegisToken;
 	private readonly _http: HttpClient;
-	private _result: AegisResult;
 
 	public setCreds(token: IAegisToken): void {
 
@@ -22,16 +21,14 @@ export class AegisVkChannel implements IAegisChannel {
 		console.log('Token was set');
 	}
 
-	public sendMessage(conversation: AegisConversation, message: AegisMessage): AegisResult {
+	public sendMessage(conversation: AegisConversation, message: AegisMessage): Promise<AegisResult> {
 		
 		if (this._token === undefined)
 			throw new Error('VK token is not set');
 
 		let url = 'https://api.vk.com/method/messages.send?chat_id=' + conversation.id + '&message=' + message.textMessage + '&v=5.69&access_token=' + this._token.getString();
 
-		this.internalSend(url);
-
-		return this._result;
+		return this.internalSend(url);
 	}
 
 	public onNewMessage: AegisEvent<AegisReceived> = new AegisEvent<AegisReceived>();
@@ -40,22 +37,50 @@ export class AegisVkChannel implements IAegisChannel {
 		this._http = http;
 	}
 
-	private async internalSend(url: string) {
+	private internalSend(url: string) : Promise<AegisResult> {
 		console.log(url);
 
-		let prom = new Promise((res, rej) => {
-					this._http.jsonp(url, 'callback').toPromise()
-						.catch((err) => {
-							console.log('[VK] ERROR: ' + err);
-							this._result = AegisResult.fail(1, err);
-							rej(err);
-						}).then((response) => {
-							console.log('[VK] SUCCESS: ' + response);
-							this._result = AegisResult.ok();
-							res();
-						});
-			});
+		let prom = new Promise<AegisResult>((resolve, reject) => 
+		{
+			let observable = this._http.jsonp(url, 'callback');
 
-		await prom;
+			let onNext = response => {
+				// console.log('[VK] NEXT'); 
+				// console.log(response); 
+				subscription.unsubscribe();
+				resolve(AegisVkChannel.parseResult(response));
+			}
+
+			let onError = response => {
+				// console.log('[VK] ERROR');
+				// console.log(response);
+				subscription.unsubscribe();
+				reject(response);
+			}
+
+			let onComplete = () => {
+				// console.log('[VK] COMPLETE');
+				subscription.unsubscribe();
+				reject('Completed');
+			}
+
+			let subscription = observable.subscribe(onNext, onError, onComplete);
+		});
+
+		return prom;
+	}
+
+	private static parseResult(result: any): AegisResult {
+		if (typeof result.response !== 'undefined')
+			return AegisResult.ok();
+
+		if (typeof result.error !== 'undefined'){
+			let errorCode = result.error.error_code;
+			let errorMsg = result.error.error_msg;
+
+			return AegisResult.fail(errorCode, errorMsg);
+		}
+
+		return AegisResult.fail(1, 'Unknown error in VK channel');
 	}
 }

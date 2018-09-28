@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AegisConversation, AegisMessage, AegisAccount } from '../model/domain';
+import { AegisConversation, AegisMessage, AegisAccount, AegisResult } from '../model/domain';
 import { AuthService } from '../services/auth.service';
 import { DialogService } from '../services/dialog.service';
 import { IAegisChannel, AegisReceived } from '../model/channels';
@@ -63,15 +63,21 @@ export class DialogComponent implements OnInit {
 
     subscription.unsubscribe();
 
-    if (!result.isSucceed)
-    {
-      console.log('Cannot send message. Code: ' + result.code + '; Error: ' + result.message);
-      return;
-    }
+    result.then(data => 
+        {
+          console.log(data);
 
-    this.selectedConv.addMessage(msg);
-    this.textMessage = "";
-  	this.stringNull = false;
+          let result = data as AegisResult;
+
+          if (result.isSucceed)
+            this.selectedConv.addMessage(msg);
+          else
+            console.log('Error: ' + result.message);
+
+          this.textMessage = "";
+      	  this.stringNull = false;
+        }
+      ).catch(err => console.log(err));
   }
    /*CSS-Класс по входящим сообщениям*/
   getClassIncoming(msg:AegisMessage) {
@@ -81,7 +87,7 @@ export class DialogComponent implements OnInit {
   }
 
   addConv(acc: AegisAccount, nameConv: string) {
-    let conv = new AegisConversation(nameConv, '108');
+    let conv = new AegisConversation(nameConv, '111');
   	acc.addConv(conv);
   }
 

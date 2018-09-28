@@ -11,7 +11,7 @@ import { AuthService } from '../services/auth.service';
 export class CheckInComponent implements OnInit {
 
   public accSvc: AuthService;
-  public tokenStr: string;
+  /*public tokenStr: string;*/
 
   constructor(acc:AuthService) { 
   	this.accSvc= acc;

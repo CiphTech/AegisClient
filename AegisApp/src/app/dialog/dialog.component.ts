@@ -21,7 +21,7 @@ export class DialogComponent implements OnInit {
   public selectedAcc: AegisAccount;
 	public selectTrue: boolean = false; // для выделения message при выборе
   public stringNull: boolean = false; // для отображения ошибки ввода
-  public columnVisible: string = "c1"; //времяночка
+  public columnVisible: string = 'c1'; //времяночка
   public titleInterlocutor: string;
 
   constructor(convSvc: AuthService, dialogSvc: DialogService) {
@@ -35,7 +35,7 @@ export class DialogComponent implements OnInit {
   selectConv(conv: AegisConversation, acc: AegisAccount){
   	this.selectedConv = conv;
     this.selectedAcc = acc;
-  	this.selectTrue = true;
+  	this.selectTrue = true;  
   }
 
   sendMessage() {

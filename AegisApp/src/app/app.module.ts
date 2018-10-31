@@ -15,7 +15,7 @@ import { ConvAccessComponent } from './conv-access/conv-access.component';
 const appRoutes: Routes =[
     { path: '', component: MainPageComponent},
     { path: 'checkin', component: CheckInComponent},
-    { path: 'convaccess', component: ConvAccessComponent}
+    { path: 'convaccess/:accId', component: ConvAccessComponent}
 ];
 
 @NgModule({

@@ -1,4 +1,9 @@
 import { Component, OnInit, Input, Output, ViewChild, ElementRef, EventEmitter, HostListener } from '@angular/core';
+import { AegisConversation, AegisMessage, AegisAccount, AegisResult } from '../model/domain';
+import { AuthService } from '../services/auth.service';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-conv-access',
@@ -7,7 +12,8 @@ import { Component, OnInit, Input, Output, ViewChild, ElementRef, EventEmitter, 
 })
 export class ConvAccessComponent implements OnInit {
 
-	public ConvName: string;
+	public convName: string;
+	private _accId: number;
 
 	@ViewChild('fileInput') fileInput: ElementRef;
 	@Input() multiple: boolean;
@@ -17,7 +23,7 @@ export class ConvAccessComponent implements OnInit {
 	files: File[];
 	isDraggedOver: Boolean;
 
-	constructor() { }
+	constructor (private route: ActivatedRoute, private router: Router, private convSvc: AuthService) {	}
 
 	// open native file dialog
 	openFileDialog(): void {
@@ -43,6 +49,15 @@ export class ConvAccessComponent implements OnInit {
 	}
 	
 	ngOnInit() {
+			this._accId = parseInt(this.route.snapshot.paramMap.get('accId'));
+			
 	}
+
+	addConv() {
+		console.log ('Id accounts = ' + this._accId + ' Name Conversation = ' + this.convName);
+    // this.convSvc.createVkConversation(accId, convName)
+    //   .then(conv => acc.addConv(conv))
+    //   .catch(err => console.log(err));
+  }
 
 }

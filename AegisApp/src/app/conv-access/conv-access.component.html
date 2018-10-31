@@ -10,10 +10,10 @@
 					<p class="card-text">This key will be kept only by you, with its help you will be able to ensure the confidentiality of your correspondence</p>
 
 	<!--Это текстовое поле для название диалога потом перенос на нужный компонент-->
-				<input type="text" placeholder="Name of the dialog" class="form-control" [(ngModel)]="ConvName">
+				<input type="text" placeholder="Name of the dialog" class="form-control" [(ngModel)]="convName">
 				<p> </p>
 
-				<button class="btn btn-primary"  routerLink="" >Create a new Key</button>
+				<button class="btn btn-primary" (click)="addConv()" routerLink="" >Create a new Key</button>
 			</div>
 		</div>
 	</div>

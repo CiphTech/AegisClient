@@ -15,7 +15,7 @@
 			<div class="convStat">
 				<div class="list-group" *ngFor="let i_acc of convSvc.accounts">
 					<li href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center active" >{{i_acc.accName}} (Name Account)
-						<button type="button" class="btn btn-outline-dark" (click)="addConv(i_acc,'Поставь сюда имя')" routerLink="/convaccess">
+						<button type="button" class="btn btn-outline-dark" routerLink="/convaccess/{{i_acc.id}}">
 							<i class="fas fa-plus-square"></i>
 						</button>
 					</li>

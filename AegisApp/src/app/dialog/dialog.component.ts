@@ -7,6 +7,7 @@ import { StringHelper } from '../utility';
 import { ConvAccessComponent } from '../conv-access/conv-access.component';
 import { AegisEvent, IEventHandler, ITypedSubscription } from '../model/events';
 
+
 @Component({
   selector: 'app-dialog',
   templateUrl: './dialog.component.html',
@@ -84,12 +85,6 @@ export class DialogComponent implements OnInit {
 
     return {"bg-danger" : msg.isIncoming};
 
-  }
-
-  addConv(acc: AegisAccount, nameConv: string) {
-    this.convSvc.createVkConversation(acc, nameConv)
-      .then(conv => acc.addConv(conv))
-      .catch(err => console.log(err));
   }
 
 }

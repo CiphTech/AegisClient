@@ -54,10 +54,15 @@ export class ConvAccessComponent implements OnInit {
 	}
 
 	addConv() {
-		console.log ('Id accounts = ' + this._accId + ' Name Conversation = ' + this.convName);
-    // this.convSvc.createVkConversation(accId, convName)
-    //   .then(conv => acc.addConv(conv))
-    //   .catch(err => console.log(err));
+
+		const msg = `Creating new conversation [ID: ${this._accId}; Title: ${this.convName}]`;
+		console.log(msg);
+
+		let acc = this.convSvc.getAcc(this._accId);
+
+		this.convSvc.createConv(acc, this.convName)
+			.then(conv => acc.addConv(conv))
+			.catch(err => console.log(err));
   }
 
 }

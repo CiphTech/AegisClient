@@ -18,32 +18,33 @@ export class AuthService {
 
 	constructor(private _http: HttpClient) { }
 
-  	public createAccount(accName:string): void {
+	public createAcc(accName: string, type: AccountType, token: string = undefined): void {
 
-  		console.log('New account ' + accName);
+		const msg = `New account ${accName} (type ${AccountType[type]})`;
+		console.log(msg);
 
-  		let token = new SimpleTextToken('testToken');
+		if (token !== undefined)
+			console.log(`Token '${token}'`);
 
-		let acc = new AegisAccount(this.getNewId(), AccountType.Test, accName, token);
-
-		this.accounts.push(acc);
-
-	}
-
-	public createVkAcc(accName: string, token: string): void {
-
-		console.log('New VK account ' + accName);
-		console.log('Token ' + token);
-
-		let tok = new SimpleTextToken(token);
+		let tok = new SimpleTextToken(token !== undefined ? token : 'testToken');
 
 		let acc = new AegisAccount(this.getNewId(), AccountType.Vk, accName, tok);
 
 		this.accounts.push(acc);
 	}
 
-	public createVkConversation(account: AegisAccount, title: string): Promise<AegisConversation> {
-		const url = 'https://api.vk.com/method/messages.createChat?title=' + title + '&v=5.69&access_token=' + account.token.getString();
+	public createConv(account: AegisAccount, title: string): Promise<AegisConversation> {
+		switch(account.accType){
+			case AccountType.Vk:
+				return this.createVkConversation(account, title);
+
+			default:
+				throw new Error(`Unexpected type of account: ${AccountType[account.accType]}`);
+		}
+	}
+
+	private createVkConversation(account: AegisAccount, title: string): Promise<AegisConversation> {
+		const url = `https://api.vk.com/method/messages.createChat?title=${title}&v=5.69&access_token=${account.token.getString()}`;
 
 		console.log(url);
 
@@ -78,6 +79,14 @@ export class AuthService {
 		});
 
 		return prom;
+	}
+
+	public getAcc(id: number): AegisAccount {
+		for(let acc in this.accounts)
+			if (this.accounts[acc].id === id)
+				return this.accounts[acc];
+
+		throw new Error(`Cannot find account by id: ${id}`);
 	}
 
 	private static internalParseVkConv(response: any, title: string): AegisConversation {

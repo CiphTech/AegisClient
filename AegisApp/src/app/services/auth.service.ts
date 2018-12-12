@@ -2,11 +2,15 @@ import { Injectable } from '@angular/core';
 import { AegisConversation, AegisMessage, AegisAccount, AccountType } from '../model/domain';
 import {IAegisToken, SimpleTextToken} from '../model/tokens';
 import {HttpClient} from "@angular/common/http";
+import { IAegisChannel } from '../model/channels';
+import {AegisChannelFactory} from '../factories/channel.factory';
+import { AegisConversationFactory } from '../factories/conversation.factory';
 
 @Injectable()
 export class AuthService {
 
 	private _currentId: number = 0;
+	private _stubChannel: IAegisChannel;
 	public readonly accounts: AegisAccount[] = new Array();
 	
 	private getNewId(): number {
@@ -28,57 +32,17 @@ export class AuthService {
 
 		let tok = new SimpleTextToken(token !== undefined ? token : 'testToken');
 
-		let acc = new AegisAccount(this.getNewId(), AccountType.Vk, accName, tok);
+		let acc = new AegisAccount(this.getNewId(), type, accName, tok);
 
 		this.accounts.push(acc);
 	}
 
 	public createConv(account: AegisAccount, title: string): Promise<AegisConversation> {
-		switch(account.accType){
-			case AccountType.Vk:
-				return this.createVkConversation(account, title);
-
-			default:
-				throw new Error(`Unexpected type of account: ${AccountType[account.accType]}`);
-		}
+		return AegisConversationFactory.createConv(account, title, this._http);
 	}
 
-	private createVkConversation(account: AegisAccount, title: string): Promise<AegisConversation> {
-		const url = `https://api.vk.com/method/messages.createChat?title=${title}&v=5.69&access_token=${account.token.getString()}`;
-
-		console.log(url);
-
-		const prom = new Promise<AegisConversation>((resolve, reject) => {
-
-			const observable = this._http.jsonp(url, 'callback');
-
-			const onNext = response => {
-				subscription.unsubscribe();
-
-				const result = AuthService.internalParseVkConv(response, title);
-
-				if (result !== undefined)
-					resolve(result);
-				else
-					reject(response);
-			}
-
-			const onError = response => {
-				subscription.unsubscribe();
-
-				reject(response);
-			}
-
-			const onComplete = () => {
-				subscription.unsubscribe();
-
-				reject('Completed');
-			}
-
-			const subscription = observable.subscribe(onNext, onError, onComplete);
-		});
-
-		return prom;
+	public createChannel(account: AegisAccount): IAegisChannel {
+		return AegisChannelFactory.createChannel(account, this._http);
 	}
 
 	public getAcc(id: number): AegisAccount {
@@ -87,13 +51,6 @@ export class AuthService {
 				return this.accounts[acc];
 
 		throw new Error(`Cannot find account by id: ${id}`);
-	}
-
-	private static internalParseVkConv(response: any, title: string): AegisConversation {
-		if (typeof response.response !== 'undefined')
-			return new AegisConversation(title, response.response);
-
-		return undefined;
 	}
 }
 

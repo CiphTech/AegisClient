@@ -35,22 +35,6 @@ export class AegisStubChannel implements IAegisChannel {
 	public onNewMessage: AegisEvent<AegisReceived> = new AegisEvent<AegisReceived>();
 }
 
-export class AegisChannelFactory {
-
-	public static createChannel(account: AegisAccount): IAegisChannel{
-		console.log('Creating new channel for account ' + account.accName);
-		return new AegisStubChannel();
-	}
-
-	public static createVkChannel(account: AegisAccount, http: HttpClient): IAegisChannel{
-		let channel = new AegisVkChannel(http);
-
-		channel.setCreds(account.token);
-
-		return channel;
-	}
-}
-
 export class AegisReceived {
 
 	public conversation: AegisConversation;

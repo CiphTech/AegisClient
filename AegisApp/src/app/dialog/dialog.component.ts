@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AegisConversation, AegisMessage, AegisAccount, AegisResult } from '../model/domain';
 import { AuthService } from '../services/auth.service';
-import { DialogService } from '../services/dialog.service';
 import { IAegisChannel, AegisReceived } from '../model/channels';
 import { StringHelper } from '../utility';
 import { ConvAccessComponent } from '../conv-access/conv-access.component';
@@ -17,7 +16,6 @@ export class DialogComponent implements OnInit {
 
 	public textMessage: string;	
   public convSvc: AuthService;
-  public dialogSvc: DialogService;
 	public selectedConv: AegisConversation = new AegisConversation("default");
   public selectedAcc: AegisAccount;
 	public selectTrue: boolean = false; // для выделения message при выборе
@@ -25,9 +23,8 @@ export class DialogComponent implements OnInit {
   public columnVisible: string = 'c1'; //времяночка
   public titleInterlocutor: string;
 
-  constructor(convSvc: AuthService, dialogSvc: DialogService) {
+  constructor(convSvc: AuthService) {
     this.convSvc = convSvc;
-    this.dialogSvc = dialogSvc;
   }
 
   ngOnInit() {
@@ -47,7 +44,7 @@ export class DialogComponent implements OnInit {
 
     let msg = new AegisMessage(this.selectedConv.nameConv, this.textMessage);
 
-    let channel = this.dialogSvc.getChannel(this.selectedAcc);
+    let channel = this.convSvc.createChannel(this.selectedAcc);
 
     let handler = function(arg: AegisReceived, context?: any) {
 

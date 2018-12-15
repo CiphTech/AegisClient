@@ -8,7 +8,6 @@ import { DialogComponent } from './dialog/dialog.component';
 import { CheckInComponent } from './check-in/check-in.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { AuthService } from './services/auth.service';
-import { DialogService } from './services/dialog.service';
 import { DragAndDropDirective } from './directives/drag-and-drop.directive';
 import { ConvAccessComponent } from './conv-access/conv-access.component';
 
@@ -37,7 +36,7 @@ const appRoutes: Routes =[
   exports: [
       DragAndDropDirective
   ],
-  providers: [AuthService, DialogService],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -5,6 +5,8 @@ import {HttpClient} from "@angular/common/http";
 import { IAegisChannel } from '../model/channels';
 import {AegisChannelFactory} from '../factories/channel.factory';
 import { AegisConversationFactory } from '../factories/conversation.factory';
+import { AegisPerson } from '../model/person';
+import { AegisFriendsProvider } from '../factories/friends.provider';
 
 @Injectable()
 export class AuthService {
@@ -35,6 +37,10 @@ export class AuthService {
 		let acc = new AegisAccount(this.getNewId(), type, accName, tok);
 
 		this.accounts.push(acc);
+
+		let promise = this.getFriends(acc);
+
+		promise.then(result => console.log(`Friends: ${result}`)).catch(result => console.log(`Rejected: ${result}`));
 	}
 
 	public createConv(account: AegisAccount, title: string): Promise<AegisConversation> {
@@ -43,6 +49,10 @@ export class AuthService {
 
 	public createChannel(account: AegisAccount): IAegisChannel {
 		return AegisChannelFactory.createChannel(account, this._http);
+	}
+
+	public getFriends(account: AegisAccount): Promise<AegisPerson[]> {
+		return AegisFriendsProvider.getFriends(account, this._http);
 	}
 
 	public getAcc(id: number): AegisAccount {

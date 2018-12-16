@@ -30,3 +30,13 @@ export class AegisPerson {
         this._lastName = lastName;
     }
 }
+
+export class AegisPersonUIContainer{
+    public readonly Person: AegisPerson;
+    public IsChecked: boolean;
+
+    constructor(person: AegisPerson) {
+        this.Person = person;
+        this.IsChecked = false;
+    }
+}

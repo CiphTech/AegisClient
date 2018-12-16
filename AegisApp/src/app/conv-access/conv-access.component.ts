@@ -3,6 +3,7 @@ import { AegisConversation, AegisMessage, AegisAccount, AegisResult } from '../m
 import { AuthService } from '../services/auth.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
+import { AegisPerson, AegisPersonUIContainer } from '../model/person';
 
 
 @Component({
@@ -13,7 +14,8 @@ import { switchMap } from 'rxjs/operators';
 export class ConvAccessComponent implements OnInit {
 
 	public convName: string;
-	private _accId: number;
+	private _acc: AegisAccount;
+	public _friends: AegisPersonUIContainer[];
 
 	@ViewChild('fileInput') fileInput: ElementRef;
 	@Input() multiple: boolean;
@@ -49,19 +51,33 @@ export class ConvAccessComponent implements OnInit {
 	}
 	
 	ngOnInit() {
-			this._accId = parseInt(this.route.snapshot.paramMap.get('accId'));
-			
+			let accId = parseInt(this.route.snapshot.paramMap.get('accId'));			
+			this._acc = this.convSvc.getAcc(accId);
+
+			let friendsProm = this.convSvc.getFriends(this._acc);
+			friendsProm.then(friends => this.SetFriends(friends)).catch(err => console.log(err));
+	}
+
+	private SetFriends(friends: AegisPerson[]): void{
+		this._friends = [];
+
+		friends.forEach(friend => {
+			let container = new AegisPersonUIContainer(friend);
+			this._friends.push(container);
+		});
 	}
 
 	addConv() {
 
-		const msg = `Creating new conversation [ID: ${this._accId}; Title: ${this.convName}]`;
+		const msg = `Creating new conversation [ID: ${this._acc.id}; Title: ${this.convName}]`;
 		console.log(msg);
 
-		let acc = this.convSvc.getAcc(this._accId);
+		let checkedFriends = this._friends.filter(friend => friend.IsChecked);
 
-		this.convSvc.createConv(acc, this.convName)
-			.then(conv => acc.addConv(conv))
+		checkedFriends.forEach(f => console.log(f.Person));
+
+		this.convSvc.createConv(this._acc, this.convName)
+			.then(conv => this._acc.addConv(conv))
 			.catch(err => console.log(err));
   }
 

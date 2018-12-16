@@ -26,7 +26,7 @@ export class AegisVkChannel implements IAegisChannel {
 		if (this._token === undefined)
 			throw new Error('VK token is not set');
 
-		let url = 'https://api.vk.com/method/messages.send?chat_id=' + conversation.id + '&message=' + message.textMessage + '&v=5.69&access_token=' + this._token.getString();
+		const url = `https://api.vk.com/method/messages.send?chat_id=${conversation.id}&message=${message.textMessage}&v=5.69&access_token=${this._token.getString()}`;
 
 		return this.internalSend(url);
 	}

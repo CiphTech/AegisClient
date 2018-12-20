@@ -6,11 +6,14 @@ export class AegisMessage {
 	private _title:string;
 	private _text:string;
 	private _from:string;
+	private _dt:Date;
 
-	constructor(title:string, text:string, from?:string){
+	constructor(title:string, text:string, from?:string, dt?: Date){
 		this._title = title;
 		this._text = text;
 		this._from = from;
+
+		this._dt = dt != null ? dt : new Date();
 	}
 
 	public get isIncoming() : boolean {
@@ -20,6 +23,11 @@ export class AegisMessage {
 	public get textMessage() : string {
 		return this._text;
 	}
+	
+	public get date() : Date {
+		return this._dt;
+	}
+	
 }
 
 export class AegisConversation {

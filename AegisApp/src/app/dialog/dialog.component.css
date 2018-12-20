@@ -21,3 +21,9 @@ a:hover {
 .btnFirstWindow {
 	height: 100px;
 }
+.card-title span {
+	float:	right;
+	font-size: 11px;
+	opacity: .8;
+}
+

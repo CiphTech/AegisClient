@@ -19,7 +19,8 @@ export class AegisStubChannel implements IAegisChannel {
 	public sendMessage(conversation: AegisConversation, message: AegisMessage): Promise<AegisResult> {
 		console.log(`[AegisStubChannel] Conversation '${conversation.nameConv}' Message '${message.textMessage}'`);
 
-		let recMsg = new AegisMessage('Received message', 'Message at ' + new Date(), 'Channel');
+		let msgDate = new Date();
+		let recMsg = new AegisMessage('Received message', `Message at ${msgDate}`, 'Channel', msgDate);
 		let msgArr: AegisMessage[] = [];
 		msgArr.push(recMsg);
 

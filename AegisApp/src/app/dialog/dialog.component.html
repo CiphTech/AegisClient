@@ -34,7 +34,7 @@
 			<div class="messages" *ngIf="selectedConv.messageCount > 0">
 				<div class="card" *ngFor="let i_msg of selectedConv.messages">
 					<div [ngClass]="getClassIncoming(i_msg)" class="card-body">
-						<h5 class="card-title">My Name</h5>
+						<h5 class="card-title">My Name<span>{{i_msg.date|date:'h:mm:ss'}}</span></h5>						
 						<h6 class="card-subtitle mb-2">{{selectedConv.nameConv}}</h6>
 						<p class="card-text">{{i_msg.textMessage}}</p>
 					</div>

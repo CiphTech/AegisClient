@@ -36,6 +36,9 @@ export class AuthService {
 
 		let acc = new AegisAccount(this.getNewId(), type, accName, tok);
 
+		const ch = AegisChannelFactory.createChannel(acc, this._http);
+		acc.setChannel(ch);
+
 		this.accounts.push(acc);
 
 		let promise = this.getFriends(acc);
@@ -45,10 +48,6 @@ export class AuthService {
 
 	public createConv(account: AegisAccount, title: string): Promise<AegisConversation> {
 		return AegisConversationFactory.createConv(account, title, this._http);
-	}
-
-	public createChannel(account: AegisAccount): IAegisChannel {
-		return AegisChannelFactory.createChannel(account, this._http);
 	}
 
 	public getFriends(account: AegisAccount): Promise<AegisPerson[]> {

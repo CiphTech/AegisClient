@@ -1,19 +1,18 @@
 import {IAegisChannel, AegisReceived} from './channels';
-import { AegisConversation, AegisAccount, AegisMessage, AegisResult } from './domain';
+import { AegisConversation, AegisMessage, AegisResult } from './domain';
 import { IAegisToken } from './tokens';
 import { AegisEvent } from './events';
-
-import { Observable, Observer } from "rxjs/Rx";
 import {HttpClient} from "@angular/common/http";
+import { AegisHttpRequester } from '../utility';
 
 export class AegisVkChannel implements IAegisChannel {
 
 	private _token: IAegisToken;
-	private readonly _http: HttpClient;
+	private readonly httpRequester: AegisHttpRequester;
 
 	public setCreds(token: IAegisToken): void {
 
-		if (this._token !== undefined)
+		if (this._token != null)
 			throw new Error('Channel token is set already');
 
 		this._token = token;
@@ -23,7 +22,7 @@ export class AegisVkChannel implements IAegisChannel {
 
 	public sendMessage(conversation: AegisConversation, message: AegisMessage): Promise<AegisResult> {
 		
-		if (this._token === undefined)
+		if (this._token == null)
 			throw new Error('VK token is not set');
 
 		const url = `https://api.vk.com/method/messages.send?chat_id=${conversation.id}&message=${message.textMessage}&v=5.69&access_token=${this._token.getString()}`;
@@ -34,47 +33,26 @@ export class AegisVkChannel implements IAegisChannel {
 	public onNewMessage: AegisEvent<AegisReceived> = new AegisEvent<AegisReceived>();
 
 	constructor(http: HttpClient) {
-		this._http = http;
+		this.httpRequester = new AegisHttpRequester(http);
 	}
 
 	private internalSend(url: string) : Promise<AegisResult> {
-		console.log(url);
+		return this.httpRequester.Request(url, response => AegisVkChannel.parseResult(response));
+	}
 
-		const prom = new Promise<AegisResult>((resolve, reject) => 
-		{
-			const observable = this._http.jsonp(url, 'callback');
-
-			const onNext = response => {
-				// console.log('[VK] NEXT'); 
-				// console.log(response); 
-				subscription.unsubscribe();
-				resolve(AegisVkChannel.parseResult(response));
-			}
-
-			const onError = response => {
-				// console.log('[VK] ERROR');
-				// console.log(response);
-				subscription.unsubscribe();
-				reject(response);
-			}
-
-			const onComplete = () => {
-				// console.log('[VK] COMPLETE');
-				subscription.unsubscribe();
-				reject('Completed');
-			}
-
-			const subscription = observable.subscribe(onNext, onError, onComplete);
-		});
-
-		return prom;
+	private getMessages() {
+		
 	}
 
 	private static parseResult(result: any): AegisResult {
-		if (typeof result.response !== 'undefined')
+
+		let responseExists = typeof result.response !== 'undefined';
+		let errorExists = typeof result.error !== 'undefined';
+
+		if (responseExists && !errorExists)
 			return AegisResult.ok();
 
-		if (typeof result.error !== 'undefined'){
+		if (errorExists){
 			let errorCode = result.error.error_code;
 			let errorMsg = result.error.error_msg;
 

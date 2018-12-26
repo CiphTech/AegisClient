@@ -1,5 +1,6 @@
 import {StringHelper} from '../utility';
 import {IAegisToken} from './tokens';
+import { IAegisChannel } from './channels';
 
 export class AegisMessage {
 
@@ -73,6 +74,7 @@ export class AegisAccount {
 	private readonly _account:string;
 	private readonly _token: IAegisToken;
 	private readonly _conv:AegisConversation[];
+	private _channel: IAegisChannel;
 
 	constructor(id: number, type: AccountType, accountName: string, accountToken: IAegisToken){
 		this._id = id;
@@ -104,6 +106,18 @@ export class AegisAccount {
 
 	public get accType() : AccountType {
 		return this._type;
+	}
+
+	public setChannel(channel: IAegisChannel): void {
+		this._channel = channel;
+	}
+
+	public getChannel(): IAegisChannel {
+		if (this._channel == null){
+			throw new Error(`Account '${this._account}' doesn't have channel`);
+		}
+
+		return this._channel;
 	}
 } 
 

@@ -44,7 +44,7 @@ export class DialogComponent implements OnInit {
 
     let msg = new AegisMessage(this.selectedConv.nameConv, this.textMessage);
 
-    let channel = this.convSvc.createChannel(this.selectedAcc);
+    const channel = this.selectedAcc.getChannel();
 
     let handler = function(arg: AegisReceived, context?: any) {
 

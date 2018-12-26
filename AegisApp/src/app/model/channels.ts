@@ -1,8 +1,6 @@
-import { AegisConversation, AegisAccount, AegisMessage, AegisResult } from './domain';
+import { AegisConversation, AegisMessage, AegisResult } from './domain';
 import { IAegisToken } from './tokens';
 import { AegisEvent } from './events';
-import {HttpClient } from '@angular/common/http';
-import {AegisVkChannel} from './channels.vk';
 
 export interface IAegisChannel {
 	setCreds(token: IAegisToken): void;
@@ -19,7 +17,7 @@ export class AegisStubChannel implements IAegisChannel {
 	}
 
 	public sendMessage(conversation: AegisConversation, message: AegisMessage): Promise<AegisResult> {
-		console.log('[AegisStubChannel] Conversation \'' + conversation.nameConv + '\' Message \'' + message.textMessage + '\'');
+		console.log(`[AegisStubChannel] Conversation '${conversation.nameConv}' Message '${message.textMessage}'`);
 
 		let recMsg = new AegisMessage('Received message', 'Message at ' + new Date(), 'Channel');
 		let msgArr: AegisMessage[] = [];

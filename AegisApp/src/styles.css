@@ -1,3 +1,4 @@
+@import '@angular/material/prebuilt-themes/pink-bluegrey.css';
 html {	
 	position: relative;
 	min-height: 100%;

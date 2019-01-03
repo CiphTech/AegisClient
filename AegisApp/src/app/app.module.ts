@@ -10,6 +10,8 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { AuthService } from './services/auth.service';
 import { DragAndDropDirective } from './directives/drag-and-drop.directive';
 import { ConvAccessComponent } from './conv-access/conv-access.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from './material';
 
 const appRoutes: Routes =[
     { path: '', component: MainPageComponent},
@@ -31,7 +33,9 @@ const appRoutes: Routes =[
     FormsModule,
     RouterModule.forRoot(appRoutes),
     HttpClientModule,
-    HttpClientJsonpModule
+    HttpClientJsonpModule,
+    BrowserAnimationsModule,
+    MaterialModule
   ],
   exports: [
       DragAndDropDirective

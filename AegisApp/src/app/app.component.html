@@ -1,23 +1,14 @@
-<nav class="navbar fixed-top navbar-light justify-content-center">
-  <a class="navbar-brand" routerLink="" href="#">AEGIS</a>
-  <ul class="nav">
-    <li class="nav-item">
-      <a class="nav-link active" href="#">Dialog Page</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">Confidencial</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">About</a>
-    </li>
-  </ul>
-</nav>
-
-<div class="container-fluid" id="content-site">
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <button mat-button routerLink="">Aegis</button>
+    <span class="example-spacer"></span>
+    <mat-icon class="example-icon" [matMenuTriggerFor]="menu">menu</mat-icon>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>Item 1</button>
+      <button mat-menu-item>Item 2</button>
+    </mat-menu>
+  </mat-toolbar-row>
+</mat-toolbar>
+<div class="container">
 <router-outlet></router-outlet>
 </div>
-
-<footer class="footer centered">
-  <span>Place sticky footer content here.</span>
-</footer>
-

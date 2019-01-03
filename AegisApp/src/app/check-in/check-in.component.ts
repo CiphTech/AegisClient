@@ -6,16 +6,16 @@ import { AccountType } from '../model/domain';
 @Component({
   selector: 'app-check-in',
   templateUrl: './check-in.component.html',
-  styleUrls: ['./check-in.component.css']
+  styleUrls: ['./check-in.component.scss']
 })
 
 export class CheckInComponent implements OnInit {
 
   private accSvc: AuthService;
-  private tokenStr: string;
+  public tokenStr: string;
 
-  constructor(acc:AuthService) { 
-  	this.accSvc= acc;
+  constructor(acc: AuthService) {
+    this.accSvc = acc;
   }
 
   private createVkAcc(): void {
@@ -28,5 +28,4 @@ export class CheckInComponent implements OnInit {
 
   ngOnInit() {
   }
-  
 }

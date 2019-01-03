@@ -1,28 +1,14 @@
-@import '@angular/material/prebuilt-themes/pink-bluegrey.css';
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
 html {	
 	position: relative;
 	min-height: 100%;
 }
 body {
-	margin: 0px;
-	padding: 0px;
-	padding-top: 60px;
+	margin: 0;
+	padding: 0;
 	background-image: url('/assets/bg.png');	
 	background-color: rgba(77, 155, 166,.4);
-	font-family: Arial, Verdana, sans-serif;
 }
 ul {
 	list-style: none;
-}
-a:link {
-    text-decoration: none;
-    text-shadow: 1px 0px 1px black;
-    color: #F4C127;
-}
-a:visited {	
-    color: #D87D0F;
-}
-a:hover {	
-    text-decoration: underline;
-	color: #052D3E;
 }

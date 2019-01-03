@@ -5,21 +5,21 @@ import { IAegisChannel, AegisReceived } from '../model/channels';
 import { StringHelper } from '../utility';
 import { ConvAccessComponent } from '../conv-access/conv-access.component';
 import { AegisEvent, IEventHandler, ITypedSubscription } from '../model/events';
-
+import { MaterialModule } from '../material';
 
 @Component({
   selector: 'app-dialog',
   templateUrl: './dialog.component.html',
-  styleUrls: ['./dialog.component.css']
+  styleUrls: ['./dialog.component.scss']
 })
 export class DialogComponent implements OnInit {
 
-	public textMessage: string;	
+  public textMessage: string;
   public convSvc: AuthService;
-	public selectedConv: AegisConversation = new AegisConversation("default");
+  public selectedConv: AegisConversation = new AegisConversation('default');
   public selectedAcc: AegisAccount;
-	public selectTrue: boolean = false; // для выделения message при выборе
-  public stringNull: boolean = false; // для отображения ошибки ввода
+  public selectTrue = false; // для выделения message при выборе
+  public stringNull = false; // для отображения ошибки ввода
   public columnVisible: string = 'c1'; //времяночка
   public titleInterlocutor: string;
 
@@ -31,16 +31,16 @@ export class DialogComponent implements OnInit {
   }
 
   selectConv(conv: AegisConversation, acc: AegisAccount){
-  	this.selectedConv = conv;
+    this.selectedConv = conv;
     this.selectedAcc = acc;
-  	this.selectTrue = true;  
+    this.selectTrue = true;
   }
 
   sendMessage() {
-  	if (StringHelper.isNullOrEmpty(this.textMessage)) {
-  		this.stringNull = true;
-  		return;
-  	}
+    if (StringHelper.isNullOrEmpty(this.textMessage)) {
+      this.stringNull = true;
+    return;
+    }
 
     let msg = new AegisMessage(this.selectedConv.nameConv, this.textMessage);
 
@@ -49,11 +49,11 @@ export class DialogComponent implements OnInit {
     let handler = function(arg: AegisReceived, context?: any) {
 
       this.titleInterlocutor = arg.conversation.nameConv;
-      
+
       for (var i = 0; i < arg.messages.length; i++) {
           this.selectedConv.addMessage(arg.messages[i]);
         }
-    }
+    };
 
     let subscription = channel.onNewMessage.subscribe(handler, this);
 
@@ -67,20 +67,21 @@ export class DialogComponent implements OnInit {
 
           let result = data as AegisResult;
 
-          if (result.isSucceed)
+          if (result.isSucceed) {
             this.selectedConv.addMessage(msg);
-          else
+          } else {
             console.log('Error: ' + result.message);
+          }
 
-          this.textMessage = "";
-      	  this.stringNull = false;
+          this.textMessage = '';
+          this.stringNull = false;
         }
       ).catch(err => console.log(err));
   }
    /*CSS-Класс по входящим сообщениям*/
-  getClassIncoming(msg:AegisMessage) {
+  getClassIncoming(msg: AegisMessage) {
 
-    return {"bg-danger" : msg.isIncoming};
+    return {'bg-danger' : msg.isIncoming};
 
   }
 

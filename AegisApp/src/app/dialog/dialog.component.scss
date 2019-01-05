@@ -13,8 +13,22 @@ a:hover {
 	height: 4em;
 	font-size: 3em;
 }
-.card-title span {
-	float:	right;
-	opacity: .8;
-}
-
+.form-messages {
+	min-width: 9em;
+	max-width: 31em;
+	width: 100%;
+  }
+  .form-full-width {
+	width: 100%;
+  }
+.message-card {
+	max-width: 400px;
+  }  
+  .message-logo-image {
+	background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+	background-size: cover;
+  }
+  .date {
+	//   float: right;
+	  opacity: .8;
+  }

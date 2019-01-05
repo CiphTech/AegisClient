@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HttpClientJsonpModule  } from '@angular/common/http';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { DialogComponent } from './dialog/dialog.component';
@@ -35,7 +35,8 @@ const appRoutes: Routes =[
     HttpClientModule,
     HttpClientJsonpModule,
     BrowserAnimationsModule,
-    MaterialModule
+    MaterialModule,    
+    ReactiveFormsModule
   ],
   exports: [
       DragAndDropDirective

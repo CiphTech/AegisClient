@@ -21,21 +21,25 @@
 	</div>
 	<div class="col-sm-8 dialog">
 		<div class="messages" *ngIf="selectedConv.messageCount > 0">
-			<div class="card" *ngFor="let i_msg of selectedConv.messages">
-				<div [ngClass]="getClassIncoming(i_msg)" class="card-body">
-					<h5 class="card-title">My Name<span>{{i_msg.date|date:'h:mm:ss'}}</span></h5>						
-					<h6 class="card-subtitle mb-2">{{selectedConv.nameConv}}</h6>
-					<p class="card-text">{{i_msg.textMessage}}</p>
-				</div>
-			</div>
+			<mat-card class="message-card" *ngFor="let i_msg of selectedConv.messages">
+				<mat-card-header>
+					<div mat-card-avatar class="message-logo-image"></div>
+					<mat-card-title>My Name<span class="date">{{i_msg.date|date:'h:mm:ss'}}</span></mat-card-title>
+					<mat-card-subtitle>{{i_msg.textMessage}}</mat-card-subtitle>
+				</mat-card-header>
+			</mat-card>
 		</div>
 		<div class="editMessage" *ngIf="selectTrue == true">
-			<div class="alert alert-danger" *ngIf="stringNull == true" role="alert">text None</div>
-			<div class="input-group mb-3">
-				<input type="text" [(ngModel)]="textMessage" class="form-control" placeholder="Add text message" (keyup.enter)="sendMessage()">
-					<div class="input-group-append">
-					<button mat-button class="btn btn-outline-secondary" type="button" (click)="sendMessage()">Send <mat-icon>send</mat-icon></button>
-					</div>
+			<div class="input-group">
+			<form class="form-messages">
+				<mat-form-field class="form-full-width">
+					<input matInput placeholder="Add text message" [(ngModel)]="textMessage" name="textMessage" (keyup.enter)="sendMessage()">
+					<mat-error>text None</mat-error>
+				</mat-form-field>
+			</form>
+			<div class="input-group-append">
+				<button mat-button class="btn btn-outline-secondary" type="button" (click)="sendMessage()">Send <mat-icon>send</mat-icon></button>
+			</div>
 			</div>
 		</div>
 		<div class="alert alert-success" *ngIf="selectTrue == false" role="alert">Select Dialog Please</div>

@@ -8,6 +8,7 @@ body {
 	padding: 0;
 	background-image: url('/assets/bg.png');	
 	background-color: rgba(77, 155, 166,.4);
+	font-size: 16px;
 }
 ul {
 	list-style: none;

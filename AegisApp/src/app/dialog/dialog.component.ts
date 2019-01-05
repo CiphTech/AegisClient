@@ -20,7 +20,6 @@ export class DialogComponent implements OnInit {
   public selectedAcc: AegisAccount;
   public selectTrue = false; // для выделения message при выборе
   public stringNull = false; // для отображения ошибки ввода
-  public columnVisible: string = 'c1'; //времяночка
   public titleInterlocutor: string;
 
   constructor(convSvc: AuthService) {
@@ -30,7 +29,7 @@ export class DialogComponent implements OnInit {
   ngOnInit() {
   }
 
-  selectConv(conv: AegisConversation, acc: AegisAccount){
+  selectConv(conv: AegisConversation, acc: AegisAccount) {
     this.selectedConv = conv;
     this.selectedAcc = acc;
     this.selectTrue = true;
@@ -61,8 +60,7 @@ export class DialogComponent implements OnInit {
 
     subscription.unsubscribe();
 
-    result.then(data => 
-        {
+    result.then(data => {
           console.log(data);
 
           let result = data as AegisResult;

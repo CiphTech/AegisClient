@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AegisConversation, AegisMessage, AegisAccount, AegisResult } from '../model/domain';
+import { AegisConversation, AegisMessage, AegisAccount, AegisResult, AccountType } from '../model/domain';
 import { AuthService } from '../services/auth.service';
 import { IAegisChannel, AegisReceived } from '../model/channels';
 import { StringHelper } from '../utility';
@@ -17,10 +17,11 @@ export class DialogComponent implements OnInit {
   public textMessage: string;
   public convSvc: AuthService;
   public selectedConv: AegisConversation = new AegisConversation('default');
-  public selectedAcc: AegisAccount;
+  public selectedAcc: AegisAccount = new AegisAccount(0, AccountType.Test,'default',undefined);
   public selectTrue = false; // для выделения message при выборе
   public stringNull = false; // для отображения ошибки ввода
   public titleInterlocutor: string;
+
 
   constructor(convSvc: AuthService) {
     this.convSvc = convSvc;
@@ -28,16 +29,26 @@ export class DialogComponent implements OnInit {
 
   ngOnInit() {
   }
-
-  selectConv(conv: AegisConversation, acc: AegisAccount) {
-    this.selectedConv = conv;
+  
+  selectAcc(acc: AegisAccount) {
     this.selectedAcc = acc;
+    console.log(`selectAcc ${acc.id}`);
+  }
+
+  selectConv(conv: AegisConversation) {
+    this.selectedConv = conv;
     this.selectTrue = true;
+    console.log(`selectConv ${conv.id}`);
+  }
+
+  isAccountSelected () {
+    return this.selectAcc !== undefined;
   }
 
   sendMessage() {
     if (StringHelper.isNullOrEmpty(this.textMessage)) {
       this.stringNull = true;
+      console.log(`message is empty`);
     return;
     }
 

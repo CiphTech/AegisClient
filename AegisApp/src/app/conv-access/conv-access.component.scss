@@ -126,3 +126,27 @@ input[type="checkbox"].friend-checkbox{
     width: 250px;
     height: 60px;
 }
+
+.new-dialog-title {
+	margin-top: 1em;
+	margin-bottom: 2em;
+}
+	.new-dialog-image {
+		background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+		background-size: cover;
+		width: 6em;
+		height: 6em;
+		border-radius: 50%
+		;
+	}
+.new-dialog-friend {
+	display: flex;
+	align-items: center;
+	padding-left: 2em;
+}
+	.name-friend {
+		padding-left: 2em;
+	}
+	mat-checkbox {
+		margin-left: auto;
+	}

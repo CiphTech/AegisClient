@@ -1,14 +1,27 @@
-<div class="row justify-content-md-center">	
-	<div class="col-md-8 create-dialog">
-		<h2>Create a dialogue</h2>
-		<div class="dialog-friends">
-			<div class="friend" *ngFor="let friend of _friends">			
-				<img class="rounded-circle friend-img" src="../../assets/images/vk.png" alt="logo name">
-				<h5 class="friend-name col-sm-7">{{friend.Person.fullName}}</h5>			
-				<input class="friend-checkbox" type="checkbox" [(ngModel)]="friend.IsChecked">			
-			</div>
-		</div>
-		<div class="dialog-defense row">
+<div class="row no-gutters new-dialog-title">
+	<div class="col-3 flex-center">
+		<div mat-card-avatar class="new-dialog-image"></div>
+	</div>
+	<div class="col-9">
+		<form class="form-full-width">
+			<mat-form-field class="form-full-width">
+			  <input matInput placeholder="New dialog" [(ngModel)]="convName" name="convName">
+			</mat-form-field>
+		</form>
+		<mat-chip-list class="form-full-width">
+			<mat-chip>One friend</mat-chip>
+			<mat-chip>Two friend</mat-chip>
+		  </mat-chip-list>
+	</div>
+</div>
+<div class="row">
+	<div class="col-4 new-dialog-friend" *ngFor="let friend of _friends">
+		<div mat-card-avatar class="message-logo-image"></div>
+		<div class="name-friend">{{friend.Person.fullName}}</div>
+		<mat-checkbox [(ngModel)]="friend.IsChecked" name="friendIsChecked"></mat-checkbox>
+	</div>
+</div>
+<div class="dialog-defense row">
 			<div class="col-sm-6">
 					<div class="dropzone" 
 					appDragAndDrop 
@@ -37,11 +50,4 @@
 				<button class="btn btn-default btn-block">Create a new Key</button>
 			</div>
 		</div>
-		<div class="input-group">
-			<input type="text" placeholder="Name of the dialog" class="form-control" [(ngModel)]="convName">
-			<span class="input-group-btn">
-				<button class="btn btn-primary dialog-btn" (click)="addConv()" type="button" routerLink="">Go!</button>
-			</span>
-		</div>
-	</div>
-</div>
+<button class="btn btn-primary" (click)="addConv()" type="button" routerLink="">Go!</button>

@@ -87,11 +87,5 @@ export class DialogComponent implements OnInit {
         }
       ).catch(err => console.log(err));
   }
-   /*CSS-Класс по входящим сообщениям*/
-  getClassIncoming(msg: AegisMessage) {
-
-    return {'bg-danger' : msg.isIncoming};
-
-  }
 
 }

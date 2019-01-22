@@ -4,71 +4,71 @@
 	</div>
 </div>
 <div class="row no-gutters dialog-block" *ngIf="convSvc.accounts.length> 0">
-<div class="col-sm-1 accounts"  >
-	<div *ngFor="let i_acc of convSvc.accounts">
-		<a href="#" (click)="selectAcc(i_acc)">
-			<div class="account-logo" matBadge="55" matBadgePosition="after"
-			matBadgeColor="accent">
+	<div class="col-sm-1 accounts" >
+		<div *ngFor="let i_acc of convSvc.accounts">
+			<a href="#" (click)="selectAcc(i_acc)">
+				<div class="account-logo" matBadge="55" matBadgePosition="after"
+				matBadgeColor="accent">
+				</div>
+			</a>
+		</div>
+		<button mat-raised-button type="button" routerLink="/checkin" class="btn btn-lg btn-outline-dark">New Account<mat-icon>add</mat-icon></button>
+	</div>
+	<div class="col-sm-4 dialog" >
+		<div class="row no-gutters dialog-search">
+			<div class="col-10">
+				<form class="dialog-form">
+				<mat-form-field class="form-full-width">
+					<mat-icon matPrefix>search</mat-icon>	
+					<input matInput placeholder="Search" name="search">
+				</mat-form-field>
+				</form>
 			</div>
-		</a>
-	</div>
-	<button mat-raised-button type="button" routerLink="/checkin" class="btn btn-lg btn-outline-dark">New Account<mat-icon>add</mat-icon></button>
-	
-</div>
-<div class="col-sm-4 dialog" >
-	<div class="row no-gutters dialog-search">
-		<div class="col-10">
-			<form class="dialog-form">
-			<mat-form-field class="form-full-width">
-				<mat-icon matPrefix>search</mat-icon>	
-				<input matInput placeholder="Search" name="search">
-			</mat-form-field>
-			</form>
+			<div class="col-2">
+				<button mat-button routerLink="/checkin"><mat-icon>add</mat-icon></button>
+			</div>
 		</div>
-		<div class="col-2">
-			<button mat-button routerLink="/checkin"><mat-icon>add</mat-icon></button>
-		</div>
-	</div>
-	<div *ngIf="isAccountSelected()">
-		<a href="#"  *ngFor="let i_conv of selectedAcc.convAcc" (click)="selectConv(i_conv)">
-			<mat-card  class="dialog-card dialog-active">
-				<mat-card-header class="dialog-card-header">
-					<div mat-card-avatar matBadge="{{i_conv.messageCount}}" matBadgePosition="after"
-						matBadgeColor="accent" class="dialog-logo-image"></div>
-					<mat-card-title>{{selectedAcc.accName}}</mat-card-title><div class="date">Date</div>
-					<mat-card-subtitle>Latest Message</mat-card-subtitle>
-				</mat-card-header>
-				<mat-card-actions align="end">
-					<button mat-button><mat-icon>delete</mat-icon></button>
-				</mat-card-actions>			
-			</mat-card>
-		</a>
-	
-	<button mat-raised-button type="button" class="btn" routerLink="/convaccess/{{selectedAcc.id}}"><mat-icon>add</mat-icon></button>
-</div></div>
-<div class="col-sm-7 message" *ngIf="selectedConv.messageCount > 0">
-	<div class="messages-outbox" *ngFor="let i_msg of selectedConv.messages">
-		<mat-card class="message-card">				
-			<div mat-card-avatar class="message-logo-image"></div>
-				<mat-card-header class="outbox-card-header">
-					<mat-card-title>My Name</mat-card-title><div class="date">{{i_msg.date|date:'h:mm:ss'}}</div>
-					<mat-card-subtitle>{{i_msg.textMessage}}</mat-card-subtitle>
-				</mat-card-header>
-		</mat-card>
-	</div>
-</div>
-	<div class="editMessage" *ngIf="selectTrue === true">
-		<div class="row d-flex align-items-center dialog-input">
-		<form class="col-sm-10 form-messages">
-			<mat-form-field class="form-full-width">
-				<input matInput placeholder="Add text message" [(ngModel)]="textMessage" (keyup.enter)="sendMessage()" name="textMessage">
-				<mat-error>text None</mat-error>
-			</mat-form-field>
-		</form>
-		<div class="col-sm-2 dialog-input-button">
-			<button mat-button class="btn btn-outline-secondary" type="button" (click)="sendMessage()">Send <mat-icon>send</mat-icon></button>
-		</div>
+		<div *ngIf="isAccountSelected()">
+			<a href="#"  *ngFor="let i_conv of selectedAcc.convAcc" (click)="selectConv(i_conv)">
+				<mat-card  class="dialog-card dialog-active">
+					<mat-card-header class="dialog-card-header">
+						<div mat-card-avatar matBadge="{{i_conv.messageCount}}" matBadgePosition="after"
+							matBadgeColor="accent" class="dialog-logo-image"></div>
+						<mat-card-title>{{selectedAcc.accName}}</mat-card-title><div class="date">Date</div>
+						<mat-card-subtitle>Latest message</mat-card-subtitle>
+					</mat-card-header>
+					<mat-card-actions align="end">
+						<button mat-button><mat-icon>delete</mat-icon></button>
+					</mat-card-actions>			
+				</mat-card>
+			</a>
+			<button mat-raised-button type="button" class="btn" routerLink="/convaccess/{{selectedAcc.id}}"><mat-icon>add</mat-icon></button>
 		</div>
 	</div>
-
+	<div class="col-sm-7 message">
+		<div *ngIf="selectedConv.messageCount > 0">
+			<div class="messages-outbox" *ngFor="let i_msg of selectedConv.messages">
+				<mat-card class="message-card">				
+					<div mat-card-avatar class="message-logo-image"></div>
+					<mat-card-header class="outbox-card-header">
+						<mat-card-title>My Name</mat-card-title><div class="date">{{i_msg.date|date:'h:mm:ss'}}</div>
+						<mat-card-subtitle>{{i_msg.textMessage}}</mat-card-subtitle>
+					</mat-card-header>
+				</mat-card>
+			</div>
+		</div>
+		<div class="editMessage" *ngIf="selectTrue === true">
+			<div class="row d-flex align-items-center dialog-input">
+				<form class="col-sm-10 form-messages">
+					<mat-form-field class="form-full-width">
+						<input matInput placeholder="Add text message" [(ngModel)]="textMessage" (keyup.enter)="sendMessage()" name="textMessage">
+						<mat-error>text None</mat-error>
+					</mat-form-field>
+				</form>
+				<div class="col-sm-2 dialog-input-button">
+					<button mat-button class="btn btn-outline-secondary" type="button" (click)="sendMessage()">Send <mat-icon>send</mat-icon></button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

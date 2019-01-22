@@ -66,6 +66,8 @@ export class ConvAccessComponent implements OnInit {
 			this._friends.push(container);
 		});
 	}
+		
+	// checkedFriends = this._friends.filter;
 
 	addConv() {
 

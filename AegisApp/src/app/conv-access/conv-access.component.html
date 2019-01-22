@@ -1,17 +1,18 @@
 <div class="row no-gutters new-dialog-title">
-	<div class="col-3 flex-center">
+	<div class="col-3 n-d-image">
 		<div mat-card-avatar class="new-dialog-image"></div>
 	</div>
 	<div class="col-9">
-		<form class="form-full-width">
-			<mat-form-field class="form-full-width">
-			  <input matInput placeholder="New dialog" [(ngModel)]="convName" name="convName">
+		<form class="full-width">
+			<mat-form-field class="full-width">
+			  <input matInput placeholder="New dialog title" [(ngModel)]="convName" name="convName">
 			</mat-form-field>
 		</form>
-		<mat-chip-list class="form-full-width">
-			<mat-chip>One friend</mat-chip>
-			<mat-chip>Two friend</mat-chip>
-		  </mat-chip-list>
+		<!-- <div *ngIf="checkedFriends.length > 0">
+			<mat-chip-list class="form-full-width" *ngFor="let friendChips of checkedFriends">
+				<mat-chip>{{friendChips.Person.fullName}}</mat-chip>
+			</mat-chip-list>
+		</div> -->
 	</div>
 </div>
 <div class="row">
@@ -22,32 +23,32 @@
 	</div>
 </div>
 <div class="dialog-defense row">
-			<div class="col-sm-6">
-					<div class="dropzone" 
-					appDragAndDrop 
-					(droppedFile)="onDropFiles($event)" 
-					(draggingOver)="onDragOver($event)" 
-					[ngClass]="{'disabled': disabled, 'is-dragged-over': isDraggedOver}">	
-					<p><a (click)="openFileDialog()">Choose a file</a> or drag it here</p>	
-					<input type="file" 
-						id="file-input" 
-						#fileInput 
-						(change)="onBrowseFiles($event)" 
-						[multiple]="multiple" 
-						[disabled]="disabled">	
-					<p class="file-name">
-						<ng-container *ngIf="files === undefined || files.length === 0">
-							No files selected
-						</ng-container>
-						<ng-container *ngIf="files !== undefined && files.length > 0">
-							<ng-container *ngIf="files.length === 1">{{ files[0].name }}</ng-container>
-							<ng-container *ngIf="files.length > 1">Multiple files selected</ng-container>
-						</ng-container>
-					</p>
-				</div>
-			</div>
-			<div class="col-sm-6">
-				<button class="btn btn-default btn-block">Create a new Key</button>
-			</div>
+	<div class="col-sm-6">
+			<div class="dropzone" 
+			appDragAndDrop 
+			(droppedFile)="onDropFiles($event)" 
+			(draggingOver)="onDragOver($event)" 
+			[ngClass]="{'disabled': disabled, 'is-dragged-over': isDraggedOver}">	
+			<p><a (click)="openFileDialog()">Choose a file</a> or drag it here</p>	
+			<input type="file" 
+				id="file-input" 
+				#fileInput 
+				(change)="onBrowseFiles($event)" 
+				[multiple]="multiple" 
+				[disabled]="disabled">	
+			<p class="file-name">
+				<ng-container *ngIf="files === undefined || files.length === 0">
+					No files selected
+				</ng-container>
+				<ng-container *ngIf="files !== undefined && files.length > 0">
+					<ng-container *ngIf="files.length === 1">{{ files[0].name }}</ng-container>
+					<ng-container *ngIf="files.length > 1">Multiple files selected</ng-container>
+				</ng-container>
+			</p>
 		</div>
-<button class="btn btn-primary" (click)="addConv()" type="button" routerLink="">Go!</button>
+	</div>
+	<div class="col-sm-6">
+		<button class="btn btn-default btn-block">Create a new Key</button>
+	</div>
+</div>
+<button class="btn btn-primary full-width" (click)="addConv()" type="button" routerLink="">Go!</button>

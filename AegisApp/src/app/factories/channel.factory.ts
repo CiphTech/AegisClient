@@ -18,9 +18,7 @@ export class AegisChannelFactory {
 	}
 
 	private static createVkChannel(account: AegisAccount, http: HttpClient): IAegisChannel{
-		let channel = new AegisVkChannel(http);
-
-		channel.setCreds(account.token);
+		let channel = new AegisVkChannel(http, account.token);
 
 		return channel;
 	}

@@ -55,11 +55,7 @@ export class DialogComponent implements OnInit {
         }
     }
 
-    let subscription = channel.onNewMessage.subscribe(handler, this);
-
     let result = channel.sendMessage(this.selectedConv, msg);
-
-    subscription.unsubscribe();
 
     result.then(data => 
         {

@@ -1,37 +1,31 @@
 import { AegisConversation, AegisMessage, AegisResult } from './domain';
-import { IAegisToken } from './tokens';
-import { AegisEvent } from './events';
 
 export interface IAegisChannel {
-	setCreds(token: IAegisToken): void;
-
 	sendMessage(conversation: AegisConversation, message: AegisMessage): Promise<AegisResult>;
 
-	onNewMessage: AegisEvent<AegisReceived>;
+	getMessages(): Promise<AegisMessage[]>;
 }
 
 export class AegisStubChannel implements IAegisChannel {
 
-	public setCreds(token: IAegisToken): void {
-		console.log('Token was set: ' + token.getString());
-	}
-
 	public sendMessage(conversation: AegisConversation, message: AegisMessage): Promise<AegisResult> {
 		console.log(`[AegisStubChannel] Conversation '${conversation.nameConv}' Message '${message.textMessage}'`);
 
+		return new Promise<AegisResult>((resolve) => resolve(AegisResult.ok()));
+	}
+
+	public getMessages(): Promise<AegisMessage[]> {
 		let msgDate = new Date();
 		let recMsg = new AegisMessage('Received message', `Message at ${msgDate}`, 'Channel', msgDate);
 		let msgArr: AegisMessage[] = [];
 		msgArr.push(recMsg);
 
-		let received = new AegisReceived(conversation, msgArr);
+		let prom = new Promise<AegisMessage[]>((resolve, reject) => {
+			resolve(msgArr);
+		})
 
-		this.onNewMessage.raise(received);
-
-		return new Promise<AegisResult>((resolve, reject) => resolve(AegisResult.ok()));
+		return prom;
 	}
-
-	public onNewMessage: AegisEvent<AegisReceived> = new AegisEvent<AegisReceived>();
 }
 
 export class AegisReceived {

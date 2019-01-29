@@ -1,6 +1,7 @@
 import {StringHelper} from '../utility';
 import {IAegisToken} from './tokens';
-import { IAegisChannel } from './channels';
+import { IAegisChannel, AegisReceived } from './channels';
+import { AegisEvent } from './events';
 
 export class AegisMessage {
 
@@ -8,13 +9,15 @@ export class AegisMessage {
 	private _text:string;
 	private _from:string;
 	private _dt:Date;
+	private _conversationId:string;
 
-	constructor(title:string, text:string, from?:string, dt?: Date){
+	constructor(title:string, text:string, from?:string, dt?: Date, chatId?: string){
 		this._title = title;
 		this._text = text;
 		this._from = from;
 
 		this._dt = dt != null ? dt : new Date();
+		this._conversationId = chatId;
 	}
 
 	public get isIncoming() : boolean {
@@ -29,6 +32,9 @@ export class AegisMessage {
 		return this._dt;
 	}
 	
+	public get conversationId() : string {
+		return this._conversationId;
+	}
 }
 
 export class AegisConversation {
@@ -82,6 +88,7 @@ export class AegisAccount {
 	private readonly _account:string;
 	private readonly _token: IAegisToken;
 	private readonly _conv:AegisConversation[];
+	private readonly _receiveTimer: NodeJS.Timer;
 	private _channel: IAegisChannel;
 
 	constructor(id: number, type: AccountType, accountName: string, accountToken: IAegisToken){
@@ -90,6 +97,7 @@ export class AegisAccount {
 		this._account = accountName;
 		this._token = accountToken;
 		this._conv = new Array();
+		this._receiveTimer = setInterval(() => {this.receiveLoop();}, 5000);
 	}
 
 	public addConv(conv:AegisConversation) {
@@ -126,6 +134,26 @@ export class AegisAccount {
 		}
 
 		return this._channel;
+	}
+
+	private receiveLoop(): void {
+		const ch = this.getChannel();
+
+		const received = ch.getMessages();
+
+		received.then(messages => messages.forEach(item => this.placeMessage(item)));
+	}
+
+	private placeMessage(message: AegisMessage): void {
+		const conv = this._conv.filter(conv => conv.id === message.conversationId);
+
+		if (conv.length === 0)
+		{
+			console.log(`Cannot find conversation with ID ${message.conversationId}`);
+			return;
+		}
+
+		conv[0].addMessage(message);
 	}
 } 
 

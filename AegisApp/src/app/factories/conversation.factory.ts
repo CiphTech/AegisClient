@@ -11,17 +11,26 @@ export class AegisConversationFactory {
 			case AccountType.Facebook:
 				return this.createFbConversation(title);
 
+			case AccountType.Test:
+				return this.createTestConversation(title);
+
 			default:
 				throw new Error(`Unexpected type of account: ${AccountType[account.accType]}`);
 		}
     }
     
-    private static createFbConversation(title: string){
+    private static createFbConversation(title: string): Promise<AegisConversation> {
         const prom = new Promise<AegisConversation>((resolve, reject) => {
             resolve(new AegisConversation(title));
         });
         return prom;
-    }
+	}
+	
+	private static createTestConversation(title: string): Promise<AegisConversation> {
+		return new Promise((resolve, reject) => {
+			resolve(new AegisConversation(title));
+		});
+	}
 
     private static createVkConversation(account: AegisAccount, title: string, http: HttpClient): Promise<AegisConversation> {
 		const url = `https://api.vk.com/method/messages.createChat?title=${title}&v=5.69&access_token=${account.token.getString()}`;

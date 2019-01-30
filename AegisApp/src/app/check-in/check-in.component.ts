@@ -26,6 +26,10 @@ export class CheckInComponent implements OnInit {
     this.accSvc.createAcc('Facebook', AccountType.Facebook);
   }
 
+  private createTestAcc(): void{
+    this.accSvc.createAcc('Test', AccountType.Test);
+  }
+
   ngOnInit() {
   }
   

@@ -8,9 +8,18 @@ export class AegisFriendsProvider {
             case AccountType.Vk:
                 return this.getVkFriends(account, http);
 
+            case AccountType.Test:
+                return this.getTestFriends();
+
             default:
                 throw new Error(`Unexpected type of account: ${AccountType[account.accType]}`);
         }
+    }
+
+    private static getTestFriends(): Promise<AegisPerson[]> {
+        return new Promise((resolve, reject) => {
+            resolve([]);
+        });
     }
 
     private static getVkFriends(account: AegisAccount, http: HttpClient): Promise<AegisPerson[]> {

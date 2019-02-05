@@ -46,8 +46,8 @@ export class AuthService {
 		// promise.then(result => console.log(`Friends: ${result}`)).catch(result => console.log(`Rejected: ${result}`));
 	}
 
-	public createConv(account: AegisAccount, title: string): Promise<AegisConversation> {
-		return AegisConversationFactory.createConv(account, title, this._http);
+	public createConv(account: AegisAccount, title: string, friends: AegisPerson[]): Promise<AegisConversation> {
+		return AegisConversationFactory.createConv(account, title, friends, this._http);
 	}
 
 	public getFriends(account: AegisAccount): Promise<AegisPerson[]> {

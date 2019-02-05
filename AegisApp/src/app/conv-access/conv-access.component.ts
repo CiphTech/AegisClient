@@ -72,11 +72,11 @@ export class ConvAccessComponent implements OnInit {
 		const msg = `Creating new conversation [ID: ${this._acc.id}; Title: ${this.convName}]`;
 		console.log(msg);
 
-		let checkedFriends = this._friends.filter(friend => friend.IsChecked);
+		let checkedFriends = this._friends.filter(friend => friend.IsChecked).map(f => f.Person);
 
-		checkedFriends.forEach(f => console.log(f.Person));
+		// checkedFriends.forEach(f => console.log(f));
 
-		this.convSvc.createConv(this._acc, this.convName)
+		this.convSvc.createConv(this._acc, this.convName, checkedFriends)
 			.then(conv => this._acc.addConv(conv))
 			.catch(err => console.log(err));
   }

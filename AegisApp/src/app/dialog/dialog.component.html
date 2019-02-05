@@ -29,7 +29,7 @@
 			</div>
 		</div>
 		<div *ngIf="isAccountSelected()">
-			<a href="#"  *ngFor="let i_conv of selectedAcc.convAcc" (click)="selectConv(i_conv)">
+			<a href="#"  *ngFor="let i_conv of getSelectedAccConversations()" (click)="selectConv(i_conv)">
 				<mat-card  class="dialog-card dialog-active">
 					<mat-card-header class="dialog-card-header">
 						<div mat-card-avatar matBadge="{{i_conv.messageCount}}" matBadgePosition="after"
@@ -42,7 +42,7 @@
 					</mat-card-actions>			
 				</mat-card>
 			</a>
-			<button mat-raised-button type="button" class="btn" routerLink="/convaccess/{{selectedAcc.id}}"><mat-icon>add</mat-icon></button>
+			<button mat-raised-button type="button" class="btn" routerLink="/convaccess/{{selectedAcc?.id}}"><mat-icon>add</mat-icon></button>
 		</div>
 	</div>
 	<div class="col-sm-7 message">

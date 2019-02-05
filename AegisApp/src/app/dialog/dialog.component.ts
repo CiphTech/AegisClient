@@ -35,6 +35,13 @@ export class DialogComponent implements OnInit {
     console.log(`selectAcc ${acc.id}`);
   }
 
+  getSelectedAccConversations(): AegisConversation[] {
+    if (this.selectedAcc == null)
+      return [];
+
+    return this.selectedAcc.convAcc;
+  }
+
   selectConv(conv: AegisConversation) {
     this.selectedConv = conv;
     this.selectTrue = true;

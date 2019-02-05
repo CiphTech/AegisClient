@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MaterialModule } from '../material';
 
 @Component({
   selector: 'app-main-page',

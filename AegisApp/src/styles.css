@@ -1,27 +1,26 @@
-html {	
-	position: relative;
-	min-height: 100%;
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+html {
+	height: 100%;
 }
 body {
-	margin: 0px;
-	padding: 0px;
-	padding-top: 60px;
-	background-image: url('/assets/bg.png');	
-	background-color: rgba(77, 155, 166,.4);
-	font-family: Arial, Verdana, sans-serif;
+	margin: 0;
+	padding: 0;
+	/* background-image: url('/assets/images/bg.png'); */
+	background-color: #e8e8e8;
+	font-size: 16px;
+	height: 100%;
+	display: flex;	
+	flex-direction: column;
+}
+.container-fluid {
+	padding: 0;
+	flex: 1 0 auto;
+	display: flex;
+	flex-direction: column;
 }
 ul {
 	list-style: none;
 }
-a:link {
-    text-decoration: none;
-    text-shadow: 1px 0px 1px black;
-    color: #F4C127;
-}
-a:visited {	
-    color: #D87D0F;
-}
-a:hover {	
-    text-decoration: underline;
-	color: #052D3E;
+footer {
+	flex: 0 0 auto;
 }

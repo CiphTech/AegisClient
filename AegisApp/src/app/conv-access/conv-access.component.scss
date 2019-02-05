@@ -129,15 +129,19 @@ input[type="checkbox"].friend-checkbox{
 
 .new-dialog-title {
 	margin-top: 1em;
-	margin-bottom: 2em;
+    margin-bottom: 2em;
 }
+    .n-d-image {        
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 	.new-dialog-image {
 		background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
 		background-size: cover;
 		width: 6em;
 		height: 6em;
-		border-radius: 50%
-		;
+        border-radius: 50%;
 	}
 .new-dialog-friend {
 	display: flex;
@@ -149,4 +153,7 @@ input[type="checkbox"].friend-checkbox{
 	}
 	mat-checkbox {
 		margin-left: auto;
-	}
+    }
+.full-width {
+    width: 100%;
+    }

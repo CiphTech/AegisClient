@@ -1,6 +1,7 @@
 import { AegisAccount, AccountType } from "../model/domain";
 import { HttpClient } from "@angular/common/http";
 import { AegisPerson } from "../model/person";
+import { AegisHttpRequester } from '../utility';
 
 export class AegisFriendsProvider {
     public static getFriends(account: AegisAccount, http: HttpClient): Promise<AegisPerson[]> {
@@ -25,28 +26,11 @@ export class AegisFriendsProvider {
     private static getVkFriends(account: AegisAccount, http: HttpClient): Promise<AegisPerson[]> {
         const url = `https://api.vk.com/method/friends.get?fields=city,domain&v=5.69&access_token=${account.token.getString()}`;
 
-		console.log(url);
+        console.log(url);
+        
+        const requester = new AegisHttpRequester(http);
 
-		const prom = new Promise<AegisPerson[]>((resolve, reject) => {
-			const observable = http.jsonp(url, 'callback');
-
-			const onNext = response => {
-				subscription.unsubscribe();
-				resolve(this.parseFriendList(response));
-            }
-            
-            const onError = response => {
-                subscription.unsubscribe();
-                reject(response);
-            }
-
-            const onCompleted = () => {
-                subscription.unsubscribe();
-                reject('Completed');
-            }
-
-            let subscription = observable.subscribe(onNext, onError, onCompleted);
-		});
+        const prom = requester.Request(url, response => this.parseFriendList(response));
 
 		return prom;
     }

@@ -39,15 +39,19 @@ export class AuthService {
 		const ch = AegisChannelFactory.createChannel(acc, this._http);
 		acc.setChannel(ch);
 
+		const prom = this.getConv(acc);
+
+		prom.then(convList => convList.forEach(conv => acc.addConv(conv))).catch(err => console.log(err));
+
 		this.accounts.push(acc);
-
-		// let promise = this.getFriends(acc);
-
-		// promise.then(result => console.log(`Friends: ${result}`)).catch(result => console.log(`Rejected: ${result}`));
 	}
 
 	public createConv(account: AegisAccount, title: string, friends: AegisPerson[]): Promise<AegisConversation> {
 		return AegisConversationFactory.createConv(account, title, friends, this._http);
+	}
+
+	public getConv(account: AegisAccount): Promise<AegisConversation[]>{
+		return AegisConversationFactory.getConv(account, this._http);
 	}
 
 	public getFriends(account: AegisAccount): Promise<AegisPerson[]> {

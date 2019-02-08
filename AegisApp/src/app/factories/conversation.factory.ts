@@ -19,7 +19,20 @@ export class AegisConversationFactory {
 			default:
 				throw new Error(`Unexpected type of account: ${AccountType[account.accType]}`);
 		}
-    }
+	}
+	
+	public static getConv(account: AegisAccount, http: HttpClient): Promise<AegisConversation[]>{
+		switch(account.accType){
+			case AccountType.Vk:
+				return this.getVkConv(account, http);
+
+			case AccountType.Test:
+				return this.getTestConv();
+
+			default:
+				throw new Error(`Unexpected type of account: ${AccountType[account.accType]}`);
+		}
+	}
     
     private static createFbConversation(title: string): Promise<AegisConversation> {
         const prom = new Promise<AegisConversation>((resolve, reject) => {
@@ -34,6 +47,25 @@ export class AegisConversationFactory {
 		});
 	}
 
+	private static getTestConv(): Promise<AegisConversation[]>{
+		return new Promise((resolve, reject) => {
+			let conv = new AegisConversation('Init conversation');
+			let convList = [conv];
+			resolve(convList);
+		})
+	}
+
+	private static getVkConv(account: AegisAccount, http: HttpClient): Promise<AegisConversation[]> {
+
+		const prefix = '__AEG__';
+
+		const url = `https://api.vk.com/method/messages.searchConversations?q=${prefix}&v=5.69&access_token=${account.token.getString()}`;
+
+		const requester = new AegisHttpRequester(http);
+
+		return requester.Request(url, response => this.internalParseVkConvList(response));
+	}
+
     private static createVkConversation(account: AegisAccount, title: string, ids: string[], http: HttpClient): Promise<AegisConversation> {
 		const aggregator = (all, x) => `${all},${x}`;
 
@@ -46,15 +78,41 @@ export class AegisConversationFactory {
 
 		const requester = new AegisHttpRequester(http);
 
-		const prom = requester.Request(url, (response) => AegisConversationFactory.internalParseVkConv(response, title));
+		const prom = requester.Request(url, (response) => AegisConversationFactory.internalParseCreatedVkConv(response, title));
 
 		return prom;
 	}
 
-    private static internalParseVkConv(response: any, title: string): AegisConversation {
+    private static internalParseCreatedVkConv(response: any, title: string): AegisConversation {
 		if (typeof response.response !== 'undefined')
 			return new AegisConversation(title, response.response);
 
 		return undefined;
+	}
+
+	private static internalParseVkConvList(response: any): AegisConversation[] {
+
+		if (typeof response.response === 'undefined'){
+			console.log('Cannot retrieve VK conversations list');
+			return [];
+		}
+
+		const result = [];
+
+		for (const conv of response.response.items) {
+			if (conv.chat_settings.title.substr(0, 7) !== '__AEG__')
+				continue;
+
+			result.push(this.internalParseVkConv(conv));
+		}
+
+		return result;
+	}
+
+	private static internalParseVkConv(item: any): AegisConversation{
+		const id = item.peer.local_id;
+		const title = item.chat_settings.title.substr(7);
+
+		return new AegisConversation(title, id);
 	}
 }

@@ -19,7 +19,11 @@ export class AegisFriendsProvider {
 
     private static getTestFriends(): Promise<AegisPerson[]> {
         return new Promise((resolve, reject) => {
-            resolve([]);
+            let yoba1 = new AegisPerson(1, 'Yoba', '');
+            let yoba2 = new AegisPerson(2, 'Alex', 'MAG');
+            let yoba3 = new AegisPerson(3, 'Alex', 'Chusik');
+
+            resolve([yoba1, yoba2, yoba3]);
         });
     }
 

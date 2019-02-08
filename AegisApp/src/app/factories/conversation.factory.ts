@@ -1,6 +1,7 @@
 import { AegisConversation, AegisAccount, AccountType } from '../model/domain';
 import {HttpClient} from "@angular/common/http";
 import { AegisPerson } from '../model/person';
+import { AegisHttpRequester } from '../utility';
 
 export class AegisConversationFactory {
 
@@ -36,39 +37,16 @@ export class AegisConversationFactory {
     private static createVkConversation(account: AegisAccount, title: string, ids: string[], http: HttpClient): Promise<AegisConversation> {
 		const aggregator = (all, x) => `${all},${x}`;
 
-		const url = `https://api.vk.com/method/messages.createChat?title=${title}&user_ids=${ids.reduce(aggregator)}&v=5.69&access_token=${account.token.getString()}`;
+		const convTitle = `__AEG__${title}`;
+		const userIds = ids.length > 0 ? `&user_ids=${ids.reduce(aggregator)}` : '';
+
+		const url = `https://api.vk.com/method/messages.createChat?title=${convTitle}${userIds}&v=5.69&access_token=${account.token.getString()}`;
 
 		console.log(url);
 
-		const prom = new Promise<AegisConversation>((resolve, reject) => {
+		const requester = new AegisHttpRequester(http);
 
-			const observable = http.jsonp(url, 'callback');
-
-			const onNext = response => {
-				subscription.unsubscribe();
-
-				const result = AegisConversationFactory.internalParseVkConv(response, title);
-
-				if (result !== undefined)
-					resolve(result);
-				else
-					reject(response);
-			}
-
-			const onError = response => {
-				subscription.unsubscribe();
-
-				reject(response);
-			}
-
-			const onComplete = () => {
-				subscription.unsubscribe();
-
-				reject('Completed');
-			}
-
-			const subscription = observable.subscribe(onNext, onError, onComplete);
-		});
+		const prom = requester.Request(url, (response) => AegisConversationFactory.internalParseVkConv(response, title));
 
 		return prom;
 	}

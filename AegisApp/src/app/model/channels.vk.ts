@@ -3,7 +3,6 @@ import { AegisConversation, AegisMessage, AegisResult } from './domain';
 import { IAegisToken } from './tokens';
 import {HttpClient} from "@angular/common/http";
 import { AegisHttpRequester, AegisHttpRequestBuilder } from '../utility';
-import { Builder } from 'protractor';
 
 export class AegisVkChannel implements IAegisChannel {
 
@@ -19,8 +18,8 @@ export class AegisVkChannel implements IAegisChannel {
 			throw new Error('VK token is not set');
 
 		const builder = AegisHttpRequestBuilder.createForVk(this._token, 'messages.send');
-		builder.addParameter('chat_id', conversation.id);
-		builder.addParameter('message', message.textMessage);
+		builder.add('chat_id', conversation.id);
+		builder.add('message', message.textMessage);
 
 		const url = builder.build();
 
@@ -30,8 +29,8 @@ export class AegisVkChannel implements IAegisChannel {
 	public getMessages(): Promise<AegisMessage[]> {
 
 		const builder = AegisHttpRequestBuilder.createForVk(this._token, 'messages.getLongPollHistory');
-		builder.addParameter('pts', this._pts);
-		builder.addParameter('ts', this._ts);
+		builder.add('pts', this._pts);
+		builder.add('ts', this._ts);
 
 		const url = builder.build();
 
@@ -50,7 +49,7 @@ export class AegisVkChannel implements IAegisChannel {
 	private getPollServer(): void{
 
 		const builder = AegisHttpRequestBuilder.createForVk(this._token, 'messages.getLongPollServer');
-		builder.addParameter('need_pts', '1');
+		builder.add('need_pts', '1');
 
 		const url = builder.build();
 

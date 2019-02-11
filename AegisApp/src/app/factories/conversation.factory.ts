@@ -60,7 +60,7 @@ export class AegisConversationFactory {
 		const prefix = '__AEG__';
 
 		const builder = AegisHttpRequestBuilder.createForVk(account.token, 'messages.searchConversations');
-		builder.addParameter('q', prefix);
+		builder.add('q', prefix);
 
 		const url = builder.build();
 
@@ -74,10 +74,10 @@ export class AegisConversationFactory {
 		const convTitle = `__AEG__${title}`;
 
 		const builder = AegisHttpRequestBuilder.createForVk(account.token, 'messages.createChat');
-		builder.addParameter('title', convTitle);
+		builder.add('title', convTitle);
 
 		if (ids.length > 0)
-			builder.addArray('user_ids', ids);
+			builder.add('user_ids', ids);
 
 		const url = builder.build();
 

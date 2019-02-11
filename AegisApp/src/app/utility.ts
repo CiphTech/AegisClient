@@ -42,14 +42,30 @@ export class AegisHttpRequester {
 	constructor(private readonly http: HttpClient) {}
 }
 
-enum AegisHttpRequestParameterType {
-	Plain,
-	Array
-}
-
 class AegisHttpRequestParameter {
 
-	constructor(public name: string, public value: any, public type: AegisHttpRequestParameterType) {
+	constructor(public name: string, public value: any) {
+	}
+
+	public build(): string {
+		if (this.value instanceof Array)
+			return this.buildArray();
+
+		return this.buildPlainText();
+	}
+
+	private buildPlainText(): string {
+		return AegisHttpRequestParameter.buildParameter(this.name, this.value);
+	}
+
+	private buildArray(): string {
+		const valAggregator = (all, x) => `${all},${x}`;
+
+		return AegisHttpRequestParameter.buildParameter(this.name, this.value.reduce(valAggregator));
+	}
+
+	private static buildParameter(name: string, value: string): string {
+		return `${name}=${value}`;
 	}
 }
 
@@ -61,15 +77,8 @@ export class AegisHttpRequestBuilder {
 		this.parameters = [];
 	}
 
-	public addParameter(name: string, value: any): void {
-		let parameter = new AegisHttpRequestParameter(name, value, AegisHttpRequestParameterType.Plain);
-
-		this.parameters.push(parameter);
-	}
-
-	public addArray(name: string, value: any[]): void {
-		let parameter = new AegisHttpRequestParameter(name, value, AegisHttpRequestParameterType.Array);
-
+	public add(name: string, value: any): void {
+		let parameter = new AegisHttpRequestParameter(name, value);
 		this.parameters.push(parameter);
 	}
 
@@ -77,36 +86,19 @@ export class AegisHttpRequestBuilder {
 		if (this.parameters.length === 0)
 			return this.initUrl;
 
-		let parametersStr = '';
-		let ampersand = '';
+		const parAggregator = (all, x) => `${all}&${x}`;
 
-		for (const parameter of this.parameters) {
-			switch (parameter.type){
-				case AegisHttpRequestParameterType.Plain:
-					parametersStr += `${ampersand}${parameter.name}=${parameter.value}`;
-					break;
+		const parStr = this.parameters.map(x => x.build()).reduce(parAggregator);
 
-				case AegisHttpRequestParameterType.Array:
-					const aggregator = (all, x) => `${all},${x}`;
-					parametersStr += `${ampersand}${parameter.name}=${parameter.value.reduce(aggregator)}`;
-					break;
-
-				default:
-					throw new Error(`Unexpected type of parameter: ${AegisHttpRequestParameterType[parameter.type]}`);
-			}
-
-			ampersand = '&';
-		}
-
-		return `${this.initUrl}?${parametersStr}`;
+		return `${this.initUrl}?${parStr}`;
 	}
 
 	public static createForVk(token: IAegisToken, method: string): AegisHttpRequestBuilder{
 		const initStr = `https://api.vk.com/method/${method}`;
 		const builder = new AegisHttpRequestBuilder(initStr);
 
-		builder.addParameter('v', '5.69');
-		builder.addParameter('access_token', token.getString());
+		builder.add('v', '5.69');
+		builder.add('access_token', token.getString());
 
 		return builder;
 	}

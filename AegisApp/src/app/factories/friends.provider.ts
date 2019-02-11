@@ -30,7 +30,7 @@ export class AegisFriendsProvider {
     private static getVkFriends(account: AegisAccount, http: HttpClient): Promise<AegisPerson[]> {
         
         const builder = AegisHttpRequestBuilder.createForVk(account.token, 'friends.get');
-        builder.addArray('fields', ['city', 'domain']);
+        builder.add('fields', ['city', 'domain']);
 
         const url = builder.build();
 

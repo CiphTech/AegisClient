@@ -1,7 +1,7 @@
 import { AegisAccount, AccountType } from "../model/domain";
 import { HttpClient } from "@angular/common/http";
 import { AegisPerson } from "../model/person";
-import { AegisHttpRequester } from '../utility';
+import { AegisHttpRequester, AegisHttpRequestBuilder } from '../utility';
 
 export class AegisFriendsProvider {
     public static getFriends(account: AegisAccount, http: HttpClient): Promise<AegisPerson[]> {
@@ -28,7 +28,11 @@ export class AegisFriendsProvider {
     }
 
     private static getVkFriends(account: AegisAccount, http: HttpClient): Promise<AegisPerson[]> {
-        const url = `https://api.vk.com/method/friends.get?fields=city,domain&v=5.69&access_token=${account.token.getString()}`;
+        
+        const builder = AegisHttpRequestBuilder.createForVk(account.token, 'friends.get');
+        builder.addArray('fields', ['city', 'domain']);
+
+        const url = builder.build();
 
         console.log(url);
         

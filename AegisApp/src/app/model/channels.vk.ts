@@ -2,7 +2,8 @@ import {IAegisChannel, AegisReceived} from './channels';
 import { AegisConversation, AegisMessage, AegisResult } from './domain';
 import { IAegisToken } from './tokens';
 import {HttpClient} from "@angular/common/http";
-import { AegisHttpRequester } from '../utility';
+import { AegisHttpRequester, AegisHttpRequestBuilder } from '../utility';
+import { Builder } from 'protractor';
 
 export class AegisVkChannel implements IAegisChannel {
 
@@ -17,14 +18,22 @@ export class AegisVkChannel implements IAegisChannel {
 		if (this._token == null)
 			throw new Error('VK token is not set');
 
-		const url = `https://api.vk.com/method/messages.send?chat_id=${conversation.id}&message=${message.textMessage}&v=5.69&access_token=${this._token.getString()}`;
+		const builder = AegisHttpRequestBuilder.createForVk(this._token, 'messages.send');
+		builder.addParameter('chat_id', conversation.id);
+		builder.addParameter('message', message.textMessage);
 
-		return this.internalSend(url);
+		const url = builder.build();
+
+		return this.httpRequester.Request(url, response => AegisVkChannel.parseSendResult(response));
 	}
 
 	public getMessages(): Promise<AegisMessage[]> {
 
-		const url = `https://api.vk.com/method/messages.getLongPollHistory?v=5.69&pts=${this._pts}&ts=${this._ts}&access_token=${this._token.getString()}`;
+		const builder = AegisHttpRequestBuilder.createForVk(this._token, 'messages.getLongPollHistory');
+		builder.addParameter('pts', this._pts);
+		builder.addParameter('ts', this._ts);
+
+		const url = builder.build();
 
 		const prom = this.httpRequester.Request(url, response => this.parseGetPollHistory(response));
 
@@ -39,7 +48,11 @@ export class AegisVkChannel implements IAegisChannel {
 	}
 
 	private getPollServer(): void{
-		const url = `https://api.vk.com/method/messages.getLongPollServer?v=5.69&need_pts=1&access_token=${this._token.getString()}`;
+
+		const builder = AegisHttpRequestBuilder.createForVk(this._token, 'messages.getLongPollServer');
+		builder.addParameter('need_pts', '1');
+
+		const url = builder.build();
 
 		const prom = this.httpRequester.Request(url, response => AegisVkChannel.parseGetPollServer(response));
 
@@ -48,10 +61,6 @@ export class AegisVkChannel implements IAegisChannel {
 			this._pts = result.pts;
 			this._ts = result.ts;
 		}).catch(err => console.log(err.toString()));
-	}
-
-	private internalSend(url: string) : Promise<AegisResult> {
-		return this.httpRequester.Request(url, response => AegisVkChannel.parseSendResult(response));
 	}
 
 	private static parseSendResult(result: any): AegisResult {

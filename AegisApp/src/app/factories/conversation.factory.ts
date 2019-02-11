@@ -1,7 +1,7 @@
 import { AegisConversation, AegisAccount, AccountType } from '../model/domain';
 import {HttpClient} from "@angular/common/http";
 import { AegisPerson } from '../model/person';
-import { AegisHttpRequester } from '../utility';
+import { AegisHttpRequester, AegisHttpRequestBuilder } from '../utility';
 
 export class AegisConversationFactory {
 
@@ -59,7 +59,10 @@ export class AegisConversationFactory {
 
 		const prefix = '__AEG__';
 
-		const url = `https://api.vk.com/method/messages.searchConversations?q=${prefix}&v=5.69&access_token=${account.token.getString()}`;
+		const builder = AegisHttpRequestBuilder.createForVk(account.token, 'messages.searchConversations');
+		builder.addParameter('q', prefix);
+
+		const url = builder.build();
 
 		const requester = new AegisHttpRequester(http);
 
@@ -67,12 +70,16 @@ export class AegisConversationFactory {
 	}
 
     private static createVkConversation(account: AegisAccount, title: string, ids: string[], http: HttpClient): Promise<AegisConversation> {
-		const aggregator = (all, x) => `${all},${x}`;
-
+		
 		const convTitle = `__AEG__${title}`;
-		const userIds = ids.length > 0 ? `&user_ids=${ids.reduce(aggregator)}` : '';
 
-		const url = `https://api.vk.com/method/messages.createChat?title=${convTitle}${userIds}&v=5.69&access_token=${account.token.getString()}`;
+		const builder = AegisHttpRequestBuilder.createForVk(account.token, 'messages.createChat');
+		builder.addParameter('title', convTitle);
+
+		if (ids.length > 0)
+			builder.addArray('user_ids', ids);
+
+		const url = builder.build();
 
 		console.log(url);
 

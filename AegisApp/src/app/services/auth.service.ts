@@ -59,9 +59,10 @@ export class AuthService {
 	}
 
 	public getAcc(id: number): AegisAccount {
-		for(let acc in this.accounts)
-			if (this.accounts[acc].id === id)
-				return this.accounts[acc];
+		const acc = this.accounts.filter(a => a.id === id);
+
+		if (acc.length > 0)
+			return acc[0];
 
 		throw new Error(`Cannot find account by id: ${id}`);
 	}

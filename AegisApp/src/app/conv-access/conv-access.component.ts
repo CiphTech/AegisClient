@@ -54,7 +54,7 @@ export class ConvAccessComponent implements OnInit {
 			let accId = parseInt(this.route.snapshot.paramMap.get('accId'));			
 			this._acc = this.convSvc.getAcc(accId);
 
-			let friendsProm = this.convSvc.getFriends(this._acc);
+			let friendsProm = this._acc.getFriends();
 			friendsProm.then(friends => this.SetFriends(friends)).catch(err => console.log(err));
 	}
 
@@ -76,11 +76,7 @@ export class ConvAccessComponent implements OnInit {
 
 		let checkedFriends = this._friends.filter(friend => friend.IsChecked).map(f => f.Person);
 
-		// checkedFriends.forEach(f => console.log(f));
-
-		this.convSvc.createConv(this._acc, this.convName, checkedFriends)
-			.then(conv => this._acc.addConv(conv))
-			.catch(err => console.log(err));
+		this._acc.createConv(this.convName, checkedFriends);
   }
 
 }

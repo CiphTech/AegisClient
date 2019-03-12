@@ -2,6 +2,7 @@ import {StringHelper} from '../utility';
 import {IAegisToken} from './tokens';
 import { IAegisChannel, AegisReceived } from './channels';
 import { AegisEvent } from './events';
+import { AegisPerson } from './person';
 
 export class AegisMessage {
 
@@ -124,16 +125,34 @@ export class AegisAccount {
 		return this._type;
 	}
 
-	public setChannel(channel: IAegisChannel): void {
+	public init(channel: IAegisChannel): void {
 		this._channel = channel;
+
+		const prom = channel.getConversations();
+
+		prom.then(convList => convList.forEach(conv => this.addConv(conv))).catch(err => console.log(err));
 	}
 
 	public getChannel(): IAegisChannel {
-		if (this._channel == null){
+		if (this._channel === null){
 			throw new Error(`Account '${this._account}' doesn't have channel`);
 		}
 
 		return this._channel;
+	}
+
+	public getFriends(): Promise<AegisPerson[]> {
+		const ch = this.getChannel();
+
+		return ch.getFriends();
+	}
+
+	public createConv(title: string, friends: AegisPerson[]): void {
+		const ch = this.getChannel();
+
+		const prom = ch.createConversation(title, friends);
+
+		prom.then(conv => this.addConv(conv)).catch(err => console.log(err));
 	}
 
 	private receiveLoop(): void {

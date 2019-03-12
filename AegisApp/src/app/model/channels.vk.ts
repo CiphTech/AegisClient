@@ -3,14 +3,64 @@ import { AegisConversation, AegisMessage, AegisResult } from './domain';
 import { IAegisToken } from './tokens';
 import {HttpClient} from "@angular/common/http";
 import { AegisHttpRequester, AegisHttpRequestBuilder } from '../utility';
+import { AegisPerson } from './person';
 
 export class AegisVkChannel implements IAegisChannel {
-
+	
 	private readonly _token: IAegisToken;
 	private readonly httpRequester: AegisHttpRequester;
 
 	private _ts: number;
 	private _pts: number;
+
+	public getFriends(): Promise<AegisPerson[]> {
+		const builder = AegisHttpRequestBuilder.createForVk(this._token, 'friends.get');
+        builder.add('fields', ['city', 'domain']);
+
+        const url = builder.build();
+
+        console.log(url);
+
+        const prom = this.httpRequester.Request(url, response => AegisVkChannel.parseFriendList(response));
+
+		return prom;
+	}
+
+	public getPerson(id: string): Promise<AegisPerson> {
+		throw new Error("Method not implemented.");
+	}
+
+	public getConversations(): Promise<AegisConversation[]> {
+		const prefix = '__AEG__';
+
+		const builder = AegisHttpRequestBuilder.createForVk(this._token, 'messages.searchConversations');
+		builder.add('q', prefix);
+
+		const url = builder.build();
+
+		return this.httpRequester.Request(url, response => AegisVkChannel.internalParseVkConvList(response));
+	}
+
+	public createConversation(title: string, friends: AegisPerson[]): Promise<AegisConversation> {
+
+		const ids = friends.map(x => x.id.toString());
+
+		const convTitle = `__AEG__${title}`;
+
+		const builder = AegisHttpRequestBuilder.createForVk(this._token, 'messages.createChat');
+		builder.add('title', convTitle);
+
+		if (ids.length > 0)
+			builder.add('user_ids', ids);
+
+		const url = builder.build();
+
+		console.log(url);
+
+		const prom = this.httpRequester.Request(url, (response) => AegisVkChannel.internalParseCreatedVkConv(response, title));
+
+		return prom;
+	}
 
 	public sendMessage(conversation: AegisConversation, message: AegisMessage): Promise<AegisResult> {
 		
@@ -45,6 +95,59 @@ export class AegisVkChannel implements IAegisChannel {
 
 		this.getPollServer();
 	}
+
+	private static parseFriendList(response: any): AegisPerson[] {
+        if (typeof response.response === 'undefined'){
+            console.log(`Cannot parse friends list. Response: ${response}`);
+            return [];
+        }
+
+        let result = [];
+
+        const items = response.response.items;
+
+        for(let rec in items)
+            result.push(this.parseFriend(items[rec]));
+
+        return result;
+	}
+	
+	private static internalParseVkConvList(response: any): AegisConversation[] {
+
+		if (typeof response.response === 'undefined'){
+			console.log('Cannot retrieve VK conversations list');
+			return [];
+		}
+
+		const result = [];
+
+		for (const conv of response.response.items) {
+			if (conv.chat_settings.title.substr(0, 7) !== '__AEG__')
+				continue;
+
+			result.push(this.internalParseVkConv(conv));
+		}
+
+		return result;
+	}
+
+	private static internalParseVkConv(item: any): AegisConversation{
+		const id = item.peer.local_id;
+		const title = item.chat_settings.title.substr(7);
+
+		return new AegisConversation(title, id);
+	}
+
+	private static internalParseCreatedVkConv(response: any, title: string): AegisConversation {
+		if (typeof response.response !== 'undefined')
+			return new AegisConversation(title, response.response);
+
+		return undefined;
+	}
+
+    private static parseFriend(node: any): AegisPerson {
+        return new AegisPerson(node.id, node.first_name, node.last_name);
+    }
 
 	private getPollServer(): void{
 

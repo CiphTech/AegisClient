@@ -89,7 +89,7 @@ export class AegisAccount {
 	private readonly _account:string;
 	private readonly _token: IAegisToken;
 	private readonly _conv:AegisConversation[];
-	private readonly _receiveTimer: NodeJS.Timer;
+	private _receiveTimer: NodeJS.Timer;
 	private _channel: IAegisChannel;
 
 	constructor(id: number, type: AccountType, accountName: string, accountToken: IAegisToken){
@@ -98,7 +98,6 @@ export class AegisAccount {
 		this._account = accountName;
 		this._token = accountToken;
 		this._conv = new Array();
-		this._receiveTimer = setInterval(() => {this.receiveLoop();}, 5000);
 	}
 
 	public addConv(conv:AegisConversation) {
@@ -131,6 +130,8 @@ export class AegisAccount {
 		const prom = channel.getConversations();
 
 		prom.then(convList => convList.forEach(conv => this.addConv(conv))).catch(err => console.log(err));
+
+		this._receiveTimer = setInterval(() => {this.receiveLoop();}, 5000);
 	}
 
 	public getChannel(): IAegisChannel {

@@ -18,15 +18,15 @@ export class CheckInComponent implements OnInit {
     this.accSvc = acc;
   }
 
-  private createVkAcc(): void {
+  public createVkAcc(): void {
     this.accSvc.createAcc('VKontakte', AccountType.Vk, this.tokenStr);
   }
 
-  private createFbAcc(): void {
+  public createFbAcc(): void {
     this.accSvc.createAcc('Facebook', AccountType.Facebook);
   }
 
-  private createTestAcc(): void{
+  public createTestAcc(): void{
     this.accSvc.createAcc('Test', AccountType.Test);
   }
 

@@ -1,10 +1,10 @@
 export class AegisPerson {
     
-    private readonly _id: number;
+    private readonly _id: string;
     private readonly _firstName: string;
     private readonly _lastName: string;
     
-    public get id() : number {
+    public get id() : string {
         return this._id;
     }
 
@@ -24,7 +24,7 @@ export class AegisPerson {
         return `[${this.id} '${this.fullName}']`;
     }
     
-    constructor(id: number, firstName: string, lastName: string) {
+    constructor(id: string, firstName: string, lastName: string) {
         this._id = id;
         this._firstName = firstName;
         this._lastName = lastName;

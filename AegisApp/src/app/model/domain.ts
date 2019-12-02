@@ -1,6 +1,6 @@
 import {StringHelper} from '../utility';
 import {IAegisToken} from './tokens';
-import { IAegisChannel, AegisReceived } from './channels';
+import { IAegisChannel, AegisMessageContainer } from './channels';
 import { AegisEvent } from './events';
 import { AegisPerson } from './person';
 
@@ -159,21 +159,21 @@ export class AegisAccount {
 	private receiveLoop(): void {
 		const ch = this.getChannel();
 
-		const received = ch.getMessages();
+		const received = ch.getMessages(0);
 
-		received.then(messages => messages.forEach(item => this.placeMessage(item)));
+		received.then(container => this.placeMessage(container));
 	}
 
-	private placeMessage(message: AegisMessage): void {
-		const conv = this._conv.filter(conv => conv.id === message.conversationId);
+	private placeMessage(container: AegisMessageContainer): void {
+		const conv = this._conv.filter(conv => conv.id === container.conversation.id);
 
 		if (conv.length === 0)
 		{
-			console.log(`Cannot find conversation with ID ${message.conversationId}`);
+			console.log(`Cannot find conversation with ID ${container.conversation.id}`);
 			return;
 		}
 
-		conv[0].addMessage(message);
+		container.messages.forEach(m => conv[0].addMessage(m));
 	}
 } 
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AegisConversation, AegisMessage, AegisAccount, AegisResult, AccountType } from '../model/domain';
 import { AuthService } from '../services/auth.service';
-import { IAegisChannel, AegisReceived } from '../model/channels';
+import { IAegisChannel, AegisMessageContainer } from '../model/channels';
 import { StringHelper } from '../utility';
 import { ConvAccessComponent } from '../conv-access/conv-access.component';
 import { AegisEvent, IEventHandler, ITypedSubscription } from '../model/events';
@@ -63,7 +63,7 @@ export class DialogComponent implements OnInit {
 
     const channel = this.selectedAcc.getChannel();
 
-    let handler = function(arg: AegisReceived, context?: any) {
+    let handler = function(arg: AegisMessageContainer, context?: any) {
 
       this.titleInterlocutor = arg.conversation.nameConv;
 

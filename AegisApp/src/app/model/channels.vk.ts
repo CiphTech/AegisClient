@@ -1,4 +1,4 @@
-import {IAegisChannel, AegisReceived} from './channels';
+import {IAegisChannel, AegisMessageContainer} from './channels';
 import { AegisConversation, AegisMessage, AegisResult } from './domain';
 import { IAegisToken } from './tokens';
 import {HttpClient} from "@angular/common/http";
@@ -76,7 +76,7 @@ export class AegisVkChannel implements IAegisChannel {
 		return this.httpRequester.Request(url, response => AegisVkChannel.parseSendResult(response));
 	}
 
-	public getMessages(): Promise<AegisMessage[]> {
+	public getMessages(counter: number): Promise<AegisMessageContainer> {
 
 		const builder = AegisHttpRequestBuilder.createForVk(this._token, 'messages.getLongPollHistory');
 		builder.add('pts', this._pts);
@@ -183,7 +183,7 @@ export class AegisVkChannel implements IAegisChannel {
 		return AegisResult.fail(1, 'Unknown error in VK channel');
 	}
 
-	private parseGetPollHistory(result: any): AegisMessage[] {
+	private parseGetPollHistory(result: any): AegisMessageContainer {
 		console.log('parseGetPollHistory');
 		console.log(result);
 

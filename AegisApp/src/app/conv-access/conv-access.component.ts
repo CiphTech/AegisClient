@@ -4,6 +4,7 @@ import { AuthService } from '../services/auth.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { AegisPerson, AegisPersonUIContainer } from '../model/person';
+import { PersonsService } from '../services/persons.service';
 
 
 @Component({
@@ -25,7 +26,7 @@ export class ConvAccessComponent implements OnInit {
 	files: File[];
 	isDraggedOver: Boolean;
 
-	constructor (private route: ActivatedRoute, private router: Router, private convSvc: AuthService) {	}
+	constructor (private route: ActivatedRoute, private router: Router, private convSvc: AuthService, private aegPersons: PersonsService) {	}
 
 	// open native file dialog
 	openFileDialog(): void {
@@ -54,7 +55,7 @@ export class ConvAccessComponent implements OnInit {
 			let accId = parseInt(this.route.snapshot.paramMap.get('accId'));			
 			this._acc = this.convSvc.getAcc(accId);
 
-			let friendsProm = this._acc.getFriends();
+			let friendsProm = this.aegPersons.getPersons();
 			friendsProm.then(friends => this.SetFriends(friends)).catch(err => console.log(err));
 	}
 

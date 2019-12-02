@@ -4,7 +4,7 @@ import { AegisPerson } from './person';
 export interface IAegisChannel {
 	sendMessage(conversation: AegisConversation, message: AegisMessage): Promise<AegisResult>;
 
-	getMessages(): Promise<AegisMessage[]>;
+	getMessages(counter: number): Promise<AegisMessageContainer>;
 
 	getFriends(): Promise<AegisPerson[]>;
 
@@ -18,12 +18,13 @@ export interface IAegisChannel {
 export class AegisStubChannel implements IAegisChannel {
 	
 	private msgBuffer: AegisMessage[];
+	private readonly conv: AegisConversation;
 
 	public getFriends(): Promise<AegisPerson[]> {
 		return new Promise((resolve, reject) => {
-            let yoba1 = new AegisPerson(1, 'Yoba', '');
-            let yoba2 = new AegisPerson(2, 'Alex', 'MAG');
-            let yoba3 = new AegisPerson(3, 'Alex', 'Chusik');
+            let yoba1 = new AegisPerson('1', 'Yoba', '');
+            let yoba2 = new AegisPerson('2', 'Alex', 'MAG');
+            let yoba3 = new AegisPerson('3', 'Alex', 'Chusik');
 
             resolve([yoba1, yoba2, yoba3]);
         });
@@ -35,8 +36,7 @@ export class AegisStubChannel implements IAegisChannel {
 
 	public getConversations(): Promise<AegisConversation[]> {
 		return new Promise((resolve, reject) => {
-			let conv = new AegisConversation('Init conversation');
-			let convList = [conv];
+			let convList = [this.conv];
 			resolve(convList);
 		})
 	}
@@ -55,10 +55,10 @@ export class AegisStubChannel implements IAegisChannel {
 		return new Promise<AegisResult>((resolve) => resolve(AegisResult.ok()));
 	}
 
-	public getMessages(): Promise<AegisMessage[]> {
+	public getMessages(counter: number): Promise<AegisMessageContainer> {
 		let messages = [].concat(this.msgBuffer);
-		let prom = new Promise<AegisMessage[]>((resolve, reject) => {
-			resolve(messages);
+		let prom = new Promise<AegisMessageContainer>((resolve, reject) => {
+			resolve(new AegisMessageContainer(this.conv, messages));
 		})
 
 		this.msgBuffer = [];
@@ -75,10 +75,11 @@ export class AegisStubChannel implements IAegisChannel {
 
 	constructor(){
 		this.msgBuffer = [];
+		this.conv = new AegisConversation('Init conv');
 	}
 }
 
-export class AegisReceived {
+export class AegisMessageContainer {
 
 	public conversation: AegisConversation;
 

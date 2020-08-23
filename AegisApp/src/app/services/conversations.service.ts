@@ -28,11 +28,10 @@ export class ConversationsService {
   /**
    * createConversation
    */
-  public async createConversation(title: string, admin: string, participants: string[]): Promise<AegisConversation> {
+  public async createConversation(title: string, participants: string[]): Promise<AegisConversation> {
     
     let dto = await this.http.post<ConversationDto>(`${this.config.getFullAegisUrl()}/conversations/create`, {
       'title': title,
-      'admin': admin,
       'participants': participants
     }).toPromise();
 

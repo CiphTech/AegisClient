@@ -51,12 +51,11 @@ export class ConvAccessComponent implements OnInit {
 	this.isDraggedOver = event;
 	}
 	
-	ngOnInit() {
-			let accId = parseInt(this.route.snapshot.paramMap.get('accId'));			
-			this._acc = this.convSvc.getAcc(accId);
+	async ngOnInit() {
+			this._acc = this.convSvc.accounts[0];
 
-			let friendsProm = this.aegPersons.getPersons();
-			friendsProm.then(friends => this.SetFriends(friends)).catch(err => console.log(err));
+			let friends = await this._acc.getFriends();
+			this.SetFriends(friends);
 	}
 
 	private SetFriends(friends: AegisPerson[]): void{
@@ -71,9 +70,6 @@ export class ConvAccessComponent implements OnInit {
 	// checkedFriends = this._friends.filter;
 
 	addConv() {
-
-		const msg = `Creating new conversation [ID: ${this._acc.id}; Title: ${this.convName}]`;
-		console.log(msg);
 
 		let checkedFriends = this._friends.filter(friend => friend.IsChecked).map(f => f.Person);
 

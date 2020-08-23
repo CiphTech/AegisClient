@@ -32,7 +32,6 @@ export class DialogComponent implements OnInit {
   
   selectAcc(acc: AegisAccount) {
     this.selectedAcc = acc;
-    console.log(`selectAcc ${acc.id}`);
   }
 
   getSelectedAccConversations(): AegisConversation[] {
@@ -52,44 +51,15 @@ export class DialogComponent implements OnInit {
     return this.selectAcc !== undefined;
   }
 
-  sendMessage() {
+  async sendMessage() {
     if (StringHelper.isNullOrEmpty(this.textMessage)) {
       this.stringNull = true;
       console.log(`message is empty`);
     return;
     }
 
-    let msg = new AegisMessage(this.selectedConv.nameConv, this.textMessage);
+    await this.selectedAcc.sendMessage(this.selectedConv, this.selectedConv.nameConv, this.textMessage);
 
-    const channel = this.selectedAcc.getChannel();
-
-    let handler = function(arg: AegisMessageContainer, context?: any) {
-
-      this.titleInterlocutor = arg.conversation.nameConv;
-
-      for (var i = 0; i < arg.messages.length; i++) {
-          this.selectedConv.addMessage(arg.messages[i]);
-        }
-    };
-
-    let result = channel.sendMessage(this.selectedConv, msg);
-
-    result.then(data => 
-        {
-          console.log(data);
-
-          let result = data as AegisResult;
-
-          if (result.isSucceed) {
-            this.selectedConv.addMessage(msg);
-          } else {
-            console.log('Error: ' + result.message);
-          }
-
-          this.textMessage = '';
-          this.stringNull = false;
-        }
-      ).catch(err => console.log(err));
   }
 
 }

@@ -3,6 +3,9 @@ import {IAegisToken} from './tokens';
 import { IAegisChannel, AegisMessageContainer } from './channels';
 import { AegisEvent } from './events';
 import { AegisPerson } from './person';
+import { PersonsService } from '../services/persons.service';
+import { ConversationsService } from '../services/conversations.service';
+import { MessagesService } from '../services/messages.service';
 
 export class AegisMessage {
 
@@ -84,32 +87,18 @@ export enum AccountType {
 
 export class AegisAccount {
 
-	private readonly _id: number;
 	private readonly _type: AccountType;
 	private readonly _account:string;
-	private readonly _token: IAegisToken;
 	private readonly _conv:AegisConversation[];
 	private _receiveTimer: NodeJS.Timer;
-	private _channel: IAegisChannel;
 
-	constructor(id: number, type: AccountType, accountName: string, accountToken: IAegisToken){
-		this._id = id;
-		this._type = type;
-		this._account = accountName;
-		this._token = accountToken;
-		this._conv = new Array();
-	}
+	private constructor(existingConv: AegisConversation[],
+		private readonly persons: PersonsService, 
+		private readonly conv: ConversationsService, 
+		private readonly msg: MessagesService){
 
-	public addConv(conv:AegisConversation) {
-		this._conv.push(conv);
-	}
-
-	public get id(): number{
-		return this._id;
-	}
-
-	public get token(): IAegisToken{
-		return this._token;
+		this._conv = existingConv;
+		this._receiveTimer = setInterval(() => {this.receiveLoop();}, 5000);
 	}
 
 	public get convAcc() : AegisConversation[] {
@@ -124,56 +113,36 @@ export class AegisAccount {
 		return this._type;
 	}
 
-	public init(channel: IAegisChannel): void {
-		this._channel = channel;
+	public static async Create(persons: PersonsService, msg: MessagesService, conv: ConversationsService): Promise<AegisAccount> {
+		let existingConv = await conv.getConversations();
 
-		const prom = channel.getConversations();
-
-		prom.then(convList => convList.forEach(conv => this.addConv(conv))).catch(err => console.log(err));
-
-		this._receiveTimer = setInterval(() => {this.receiveLoop();}, 5000);
+		return new AegisAccount(existingConv, persons, conv, msg);
 	}
 
-	public getChannel(): IAegisChannel {
-		if (this._channel === null){
-			throw new Error(`Account '${this._account}' doesn't have channel`);
-		}
-
-		return this._channel;
+	public async getFriends(): Promise<AegisPerson[]> {
+		return await this.persons.getPersons();
 	}
 
-	public getFriends(): Promise<AegisPerson[]> {
-		const ch = this.getChannel();
+	public async createConv(title: string, friends: AegisPerson[]): Promise<void> {
+		let conv = await this.conv.createConversation(title, friends.map(x => x.id));
 
-		return ch.getFriends();
+		this._conv.push(conv);
 	}
 
-	public createConv(title: string, friends: AegisPerson[]): void {
-		const ch = this.getChannel();
+	public async sendMessage(conv: AegisConversation, title: string, body: string): Promise<void> {
+		let msg = await this.msg.sendMessage(conv.id, title, body);
 
-		const prom = ch.createConversation(title, friends);
-
-		prom.then(conv => this.addConv(conv)).catch(err => console.log(err));
+		conv.addMessage(msg);
 	}
 
-	private receiveLoop(): void {
-		const ch = this.getChannel();
-
-		const received = ch.getMessages(0);
-
-		received.then(container => this.placeMessage(container));
+	private async receiveLoop(): Promise<void> {
+		this._conv.forEach(async c => await this.receiveMsg(c, 0));
 	}
 
-	private placeMessage(container: AegisMessageContainer): void {
-		const conv = this._conv.filter(conv => conv.id === container.conversation.id);
+	private async receiveMsg(conversation: AegisConversation, counter: number): Promise<void> {
+		let messages = await this.msg.getMessages(conversation.id, counter);
 
-		if (conv.length === 0)
-		{
-			console.log(`Cannot find conversation with ID ${container.conversation.id}`);
-			return;
-		}
-
-		container.messages.forEach(m => conv[0].addMessage(m));
+		messages.forEach(msg => conversation.addMessage(msg));
 	}
 } 
 
